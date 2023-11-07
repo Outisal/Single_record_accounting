@@ -9,3 +9,8 @@ The features are:
 * The app has a list of sales and cost types that are required to use in accounting in Finland.
 * The user can view sales and costs in a list view that has all the required fieds for the income statement.
 * The user can open the invoice in pdf format from the corresponding sales row.
+
+You can create the database tables by running the following command in the application folder: 
+```
+psql < schema.sql
+```
