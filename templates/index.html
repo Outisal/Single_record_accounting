@@ -1,0 +1,14 @@
+{% if session.username %}
+<p>You are signed in as {{ session.username }}</p>
+<a href="/logout">Log out</a>
+{% else %}
+<h1>Welcome to Single Record Accounting App</h1>
+<p>The app can be used for single record accounting for small businesses in Finland. 
+    In Finland, single record accounting is allowed for businesses that meet at most one of the following conditions: 
+    The balance sheet total is over 200 000 euros, the revenue is over 200 000 euros or it employs at least 3 persons. 
+    The app is for recording sales and costs, creating pdf invoices and having a record view that includes all required information 
+    for the income statement.</p>
+You need to log in to get started. Please log in <a href="/login">here.</a>
+<p>
+If you don't have an account yet, you can register <a href="/register">here.</a>
+{% endif %}

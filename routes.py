@@ -4,8 +4,8 @@ from flask import render_template, request, redirect
 
 
 @app.route("/")
-def test():
-    return "Welcome"
+def index():
+    return render_template("index.html")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
