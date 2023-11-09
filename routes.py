@@ -38,3 +38,24 @@ def register():
             return redirect("/")
         else:
             return render_template("error.html", message="Registeration failed")
+        
+@app.route("/update_favorites", methods=["GET","POST"])
+def favorites():
+    if request.method == "GET":
+        favorites = users.get_favorites()
+        if favorites:
+            return render_template("update_favorites.html", business_id = favorites.business_id, iban = favorites.iban, 
+                                   payment_term = favorites.payment_term, vat = favorites.vat, email = favorites.email, 
+                                   mobile_nr = favorites.mobile_nr, post_address = favorites.post_address)
+        return render_template("update_favorites.html")
+    if request.method == "POST":
+        user_id = request.form["user_id"]
+        business_id = request.form["business_id"]
+        iban = request.form["iban"]
+        payment_term = request.form["payment_term"] if request.form["payment_term"] else None
+        vat = request.form["vat"] if request.form["vat"] else None
+        email = request.form["email"]
+        mobile_nr = request.form["mobile_nr"]
+        post_address =request.form["post_address"]
+        users.update_favorites(user_id, business_id, iban, payment_term, vat, email, mobile_nr, post_address)
+        return redirect("/")

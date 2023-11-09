@@ -1,0 +1,21 @@
+<form action="/update_favorites" method="POST">
+<h2>Maintain favorites for {{ session.username }}</h2>
+<p>
+Business-id: <input type="text" name="business_id" value={{business_id}}> 
+<p>
+IBAN: <input type="text" name="iban" value={{iban}}>
+<p>
+Payment term (days): <input type="number" name="payment_term" value={{payment_term}}>
+<p>
+VAT (%): <input type="number" name="vat" value={{vat}}>
+<p>
+<p>Contact information:</p>
+email: <input type="text" name="email" value={{email}}>
+<p>
+mobile number: <input type="text" name="mobile_nr" value={{mobile_nr}}>
+<p>
+post address: <input type="text" name="post_address" value={{post_address}}>
+<p>
+<input type="submit" value="Save favorites">
+<input type="hidden" name="user_id" value="{{ session.user_id }}">
+</form>

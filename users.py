@@ -12,6 +12,7 @@ def login(username, password):
     else:
         if check_password_hash(user.password, password):
             session["username"] = username
+            session["user_id"] = user.id
             return True
         else:
             return False
@@ -25,10 +26,37 @@ def register(username, password):
         sql = text("INSERT INTO users (username,password) VALUES (:username,:password)")
         db.session.execute(sql, {"username":username, "password":hash_value})
         db.session.commit()
-    except Exception as ex:
-        print(ex)
+    except:
         return False
     return login(username, password)
 
+def get_favorites():
+    user_id = get_logged_in_user_id()
+    sql = text("SELECT * FROM favorites WHERE user_id=:user_id")
+    result = db.session.execute(sql, {"user_id":user_id})
+    return result.fetchone()
+
+
+def update_favorites(user_id, business_id, iban, payment_term, vat, email, mobile_nr, post_address):
+    sql = text("SELECT user_id FROM favorites WHERE user_id=:user_id")
+    result = db.session.execute(sql, {"user_id":user_id})
+    user = result.fetchone()
+    if user: 
+        sql = text("""UPDATE favorites SET business_id=:business_id, iban=:iban, payment_term=:payment_term, 
+                   vat=:vat, email=:email, mobile_nr=:mobile_nr, post_address=:post_address
+                   WHERE user_id=:user_id""")
+        db.session.execute(sql,{"user_id":user_id, "business_id":business_id, "iban":iban, "payment_term":payment_term,
+                                "vat":vat, "email":email, "mobile_nr":mobile_nr, "post_address":post_address})
+        db.session.commit()
+    else:
+        sql = text("""INSERT INTO favorites (user_id, business_id, iban, payment_term, vat, email, mobile_nr, post_address) 
+                   VALUES (:user_id,:business_id,:iban,:payment_term,:vat,:email,:mobile_nr,:post_address)""")
+        db.session.execute(sql,{"user_id":user_id, "business_id":business_id, "iban":iban, "payment_term":payment_term,
+                                "vat":vat, "email":email, "mobile_nr":mobile_nr, "post_address":post_address})
+        db.session.commit()
+
 def username():
     return session.get("username",0)
+
+def get_logged_in_user_id():
+    return session.get("user_id",0)

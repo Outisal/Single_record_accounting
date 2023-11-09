@@ -6,13 +6,13 @@ CREATE TABLE users (
 CREATE TABLE favorites (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users,
-    IBAN TEXT,
-    Business_id TEXT,
+    iban TEXT,
+    business_id TEXT,
     email TEXT,
     mobile_nr TEXT,
     post_address TEXT,
     payment_term INTEGER,
-    VAT INTEGER
+    vat INTEGER
 );
 
 CREATE TABLE records (
@@ -23,7 +23,7 @@ CREATE TABLE records (
     record_type TEXT,
     record_class TEXT,
     amount INTEGER,
-    price InTEGER
+    price INTEGER
 );
 
 CREATE TABLE invoice (

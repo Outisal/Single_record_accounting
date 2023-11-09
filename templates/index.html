@@ -1,5 +1,7 @@
 {% if session.username %}
 <p>You are signed in as {{ session.username }}</p>
+<a href="/update_favorites">Update favorites</a>
+<p>
 <a href="/logout">Log out</a>
 {% else %}
 <h1>Welcome to Single Record Accounting App</h1>
