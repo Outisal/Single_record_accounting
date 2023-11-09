@@ -1,0 +1,14 @@
+<form action="/add_cost" method="POST">
+Add cost:
+<p>
+Date: <input type="date" name="record_date" required> 
+<p>
+Title: <input type="text" name="title" required>
+<p>
+Class: <input type="text" name="record_class" required>
+<p>
+Cost (€): <input type="number" name="price" required>
+<p>
+<input type="submit" value="Save cost">
+<input type="hidden" name="user_id" value="{{ session.user_id }}">
+</form>

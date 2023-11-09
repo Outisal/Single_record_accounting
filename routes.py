@@ -1,5 +1,6 @@
 from app import app
 import users
+import records
 from flask import render_template, request, redirect
 
 
@@ -58,4 +59,17 @@ def favorites():
         mobile_nr = request.form["mobile_nr"]
         post_address =request.form["post_address"]
         users.update_favorites(user_id, business_id, iban, payment_term, vat, email, mobile_nr, post_address)
+        return redirect("/")
+    
+@app.route("/add_cost", methods=["GET","POST"])
+def add_cost():
+    if request.method == "GET":
+        return render_template("add_cost.html")
+    if request.method == "POST":
+        user_id = request.form["user_id"]
+        record_date = request.form["record_date"]
+        title = request.form["title"]
+        record_class = request.form["record_class"]
+        price = request.form["price"]
+        records.add_cost(user_id, record_date, title, record_class, price)
         return redirect("/")
