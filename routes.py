@@ -73,3 +73,19 @@ def add_cost():
         price = request.form["price"]
         records.add_cost(user_id, record_date, title, record_class, price)
         return redirect("/")
+    
+@app.route("/add_sales", methods=["GET","POST"])
+def add_sales():
+    if request.method == "GET":
+        return render_template("add_sales.html")
+    if request.method == "POST":
+        user_id = request.form["user_id"]
+        record_date = request.form["record_date"]
+        record_class = request.form["record_class"]
+        amount = request.form["amount"]
+        price = request.form["price"]
+        customer = request.form["customer"]
+        title = request.form['title']
+        record_id = records.add_sales(user_id, record_date, title, record_class, amount, price)
+        records.add_invoice(record_id, customer)
+        return redirect("/")

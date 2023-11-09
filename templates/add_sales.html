@@ -1,0 +1,18 @@
+<form action="/add_sales" method="POST">
+Add sales:
+<p>
+Date: <input type="date" name="record_date" required> 
+<p>
+Title: <input type="text" name="title" required>
+<p>
+Class: <input type="text" name="record_class" required>
+<p>
+Customer: <input type="text" name="customer" required>
+<p>
+Amount (h): <input type="number" name="amount" required>
+<p>
+Price (€): <input type="number" name="price" required>
+<p>
+<input type="submit" value="Save sales record">
+<input type="hidden" name="user_id" value="{{ session.user_id }}">
+</form>
