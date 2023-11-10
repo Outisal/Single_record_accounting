@@ -23,7 +23,9 @@ def add_sales(user_id, record_date, title, record_class, amount, price):
     db.session.commit()
     return record_id
 
-def add_invoice(record_id, customer):
-    sql = text("""INSERT INTO invoice (record_id, customer) VALUES(:record_id,:customer)""")
-    db.session.execute(sql, {"record_id":record_id, "customer":customer})
+def add_invoice(record_id, customer, payment_term, vat, iban, email, mobile_nr, post_address):
+    sql = text("""INSERT INTO invoice (record_id, customer, payment_term, vat, iban, email, mobile_nr, post_address) 
+               VALUES(:record_id,:customer,:payment_term,:vat,:iban,:email,:mobile_nr,:post_address)""")
+    db.session.execute(sql, {"record_id":record_id, "customer":customer, "payment_term":payment_term, "vat":vat, 
+                             "iban":iban, "email":email, "mobile_nr":mobile_nr, "post_address":post_address})
     db.session.commit()

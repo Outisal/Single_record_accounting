@@ -13,6 +13,20 @@ Amount (h): <input type="number" name="amount" required>
 <p>
 Price (€): <input type="number" name="price" required>
 <p>
+The following is prefilled based on your favorites. Change if needed.
+<p>
+IBAN: <input type="text" name="iban" value={{iban}} required>
+<p>
+Payment term (days): <input type="number" name="payment_term" value={{payment_term}} required>
+<p>
+VAT (%): <input type="number" name="vat" value={{vat}} required>
+<p>
+email: <input type="text" name="email" value={{email}} required>
+<p>
+mobile number: <input type="text" name="mobile_nr" value={{mobile_nr}} required>
+<p>
+post address: <input type="text" name="post_address" value={{post_address}} required>
+<p>
 <input type="submit" value="Save sales record">
 <input type="hidden" name="user_id" value="{{ session.user_id }}">
 </form>

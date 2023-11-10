@@ -77,15 +77,25 @@ def add_cost():
 @app.route("/add_sales", methods=["GET","POST"])
 def add_sales():
     if request.method == "GET":
-        return render_template("add_sales.html")
+        favorites = users.get_favorites()
+        if favorites:
+            return render_template("add_sales.html", iban = favorites.iban, payment_term = favorites.payment_term, 
+                               vat = favorites.vat, email = favorites.email, mobile_nr = favorites.mobile_nr, 
+                               post_address = favorites.post_address)
     if request.method == "POST":
         user_id = request.form["user_id"]
         record_date = request.form["record_date"]
         record_class = request.form["record_class"]
         amount = request.form["amount"]
         price = request.form["price"]
+        payment_term = request.form["payment_term"]
+        vat = request.form["vat"]
         customer = request.form["customer"]
-        title = request.form['title']
+        title = request.form["title"]
+        iban = request.form["iban"]
+        email = request.form["email"]
+        mobile_nr = request.form["mobile_nr"]
+        post_address =request.form["post_address"]
         record_id = records.add_sales(user_id, record_date, title, record_class, amount, price)
-        records.add_invoice(record_id, customer)
+        records.add_invoice(record_id, customer, payment_term, vat, iban, email, mobile_nr, post_address)
         return redirect("/")

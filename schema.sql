@@ -29,5 +29,12 @@ CREATE TABLE records (
 CREATE TABLE invoice (
     id SERIAL PRIMARY KEY,
     record_id INTEGER REFERENCES records,
-    customer TEXT
+    customer TEXT,
+    iban TEXT,
+    email TEXT,
+    mobile_nr TEXT,
+    post_address TEXT,
+    payment_term INTEGER,
+    vat INTEGER
 );
+records
