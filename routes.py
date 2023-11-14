@@ -37,7 +37,7 @@ def register():
             return render_template("error.html", message="passwords don't match")
         if users.register(username, password1):
             return redirect("/")
-        else:
+        else:   
             return render_template("error.html", message="Registeration failed")
         
 @app.route("/update_favorites", methods=["GET","POST"])
@@ -99,3 +99,8 @@ def add_sales():
         record_id = records.add_sales(user_id, record_date, title, record_class, amount, price)
         records.add_invoice(record_id, customer, payment_term, vat, iban, email, mobile_nr, post_address)
         return redirect("/")
+    
+@app.route("/records")
+def view_records():
+    record_data = records.show_records()
+    return render_template("records.html", value = record_data)
