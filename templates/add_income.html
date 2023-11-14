@@ -1,5 +1,5 @@
-<form action="/add_sales" method="POST">
-Add sales:
+<form action="/add_income" method="POST">
+Add income:
 <p>
 Date: <input type="date" name="record_date" required> 
 <p>
@@ -27,6 +27,6 @@ mobile number: <input type="text" name="mobile_nr" value={{mobile_nr}} required>
 <p>
 post address: <input type="text" name="post_address" value={{post_address}} required>
 <p>
-<input type="submit" value="Save sales record">
+<input type="submit" value="Save income record">
 <input type="hidden" name="user_id" value="{{ session.user_id }}">
 </form>

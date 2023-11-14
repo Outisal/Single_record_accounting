@@ -4,8 +4,8 @@ from flask import session
 from sqlalchemy.sql import text
 from werkzeug.security import check_password_hash, generate_password_hash
 
-def add_cost(user_id, record_date, title, record_class, price):
-    record_type = "cost"
+def add_expense(user_id, record_date, title, record_class, price):
+    record_type = "Expense"
     amount = 1
     sql = text("""INSERT INTO records (user_id, record_date, title, record_type, record_class, amount, price)
                VALUES(:user_id,:record_date,:title,:record_type,:record_class,:amount,:price)""")
@@ -13,8 +13,8 @@ def add_cost(user_id, record_date, title, record_class, price):
                              "record_class":record_class, "amount":amount, "price":price})
     db.session.commit()
 
-def add_sales(user_id, record_date, title, record_class, amount, price):
-    record_type = "sales"
+def add_income(user_id, record_date, title, record_class, amount, price):
+    record_type = "Income"
     sql = text("""INSERT INTO records (user_id, record_date, title, record_type, record_class, amount, price)
                VALUES(:user_id,:record_date,:title,:record_type,:record_class,:amount,:price)
                RETURNING id""")

@@ -61,25 +61,25 @@ def favorites():
         users.update_favorites(user_id, business_id, iban, payment_term, vat, email, mobile_nr, post_address)
         return redirect("/")
     
-@app.route("/add_cost", methods=["GET","POST"])
-def add_cost():
+@app.route("/add_expense", methods=["GET","POST"])
+def add_expense():
     if request.method == "GET":
-        return render_template("add_cost.html")
+        return render_template("add_expense.html")
     if request.method == "POST":
         user_id = request.form["user_id"]
         record_date = request.form["record_date"]
         title = request.form["title"]
         record_class = request.form["record_class"]
         price = request.form["price"]
-        records.add_cost(user_id, record_date, title, record_class, price)
+        records.add_expense(user_id, record_date, title, record_class, price)
         return redirect("/")
     
-@app.route("/add_sales", methods=["GET","POST"])
-def add_sales():
+@app.route("/add_income", methods=["GET","POST"])
+def add_income():
     if request.method == "GET":
         favorites = users.get_favorites()
         if favorites:
-            return render_template("add_sales.html", iban = favorites.iban, payment_term = favorites.payment_term, 
+            return render_template("add_income.html", iban = favorites.iban, payment_term = favorites.payment_term, 
                                vat = favorites.vat, email = favorites.email, mobile_nr = favorites.mobile_nr, 
                                post_address = favorites.post_address)
     if request.method == "POST":
@@ -96,7 +96,7 @@ def add_sales():
         email = request.form["email"]
         mobile_nr = request.form["mobile_nr"]
         post_address =request.form["post_address"]
-        record_id = records.add_sales(user_id, record_date, title, record_class, amount, price)
+        record_id = records.add_income(user_id, record_date, title, record_class, amount, price)
         records.add_invoice(record_id, customer, payment_term, vat, iban, email, mobile_nr, post_address)
         return redirect("/")
     
