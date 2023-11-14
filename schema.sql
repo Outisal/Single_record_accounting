@@ -37,4 +37,10 @@ CREATE TABLE invoice (
     payment_term INTEGER,
     vat INTEGER
 );
-records
+
+CREATE TABLE record_class (
+    id SERIAL PRIMARY KEY,
+    record_type TEXT,
+    record_class TEXT,
+    vat INTEGER
+);
