@@ -1,4 +1,4 @@
-<form action="/update_favorites" method="POST">
+<form action="/update_favorites" method="POST" onsubmit="return check(this)">
 <h2>Maintain favorites for {{ session.username }}</h2>
 <p>
 Business-id: <input type="text" name="business_id" value={{business_id}}> 
@@ -17,3 +17,33 @@ post address: <input type="text" name="post_address" value={{post_address}}>
 <button type="button" onclick="window.location.href='/'">Cancel</button>
 <input type="hidden" name="user_id" value="{{ session.user_id }}">
 </form>
+
+<script>
+    function check(form) {
+        if (form.business_id.value.length > 100) {
+            alert("Business id is too long");
+            return false;
+        }
+        if (form.iban.value.length > 34) {
+            alert("IBAN is too long");
+            return false;
+        }
+        if (parseFloat(form.payment_term.value) > 300) {
+            alert("Payment term should be less than 300 days");
+            return false;
+        }
+        if (form.email.value.length > 320) {
+            alert("Email is too long");
+            return false;
+        }
+        if (form.mobile_nr.value.length > 15) {
+            alert("Mobile number is too long");
+            return false;
+        }
+        if (form.post_address.value.length > 100) {
+            alert("Post address is too long");
+            return false;
+        }
+        return true;
+    }
+    </script>

@@ -57,6 +57,18 @@ def favorites():
         email = request.form["email"]
         mobile_nr = request.form["mobile_nr"]
         post_address =request.form["post_address"]
+        if len(iban) > 34:
+            return render_template("error.html", message="IBAN is too long")
+        if float(payment_term) > 300:
+            return render_template("error.html", message="Payment term should be less than 300 days")       
+        if len(business_id) > 100:
+            return render_template("error.html", message="Business id is too long")    
+        if len(email) > 320:
+            return render_template("error.html", message="Email is too long") 
+        if len(mobile_nr) > 15:
+            return render_template("error.html", message="Mobile number is too long") 
+        if len(post_address) > 100:
+            return render_template("error.html", message="Post address is too long")   
         users.update_favorites(user_id, business_id, iban, payment_term, email, mobile_nr, post_address)
         return redirect("/")
     
@@ -71,6 +83,10 @@ def add_expense():
         title = request.form["title"]
         record_class_id = request.form["record_class"]
         price = request.form["price"]
+        if len(title) > 100:
+            return render_template("error.html", message="Title is too long")
+        if float(price) > 200000:
+            return render_template("error.html", message="Price is too high")
         records.add_expense(user_id, record_date, title, record_class_id, price)
         return redirect("/")
     
@@ -97,6 +113,24 @@ def add_income():
         email = request.form["email"]
         mobile_nr = request.form["mobile_nr"]
         post_address =request.form["post_address"]
+        if len(title) > 100:
+            return render_template("error.html", message="Title is too long")
+        if float(amount) > 1000:
+            return render_template("error.html", message="Amount is too high")
+        if float(price) > 200000:
+            return render_template("error.html", message="Price is too high")
+        if len(iban) > 34:
+            return render_template("error.html", message="IBAN is too long")
+        if float(payment_term) > 300:
+            return render_template("error.html", message="Payment term should be less than 300 days")       
+        if len(customer) > 100:
+            return render_template("error.html", message="Customer name is too long")    
+        if len(email) > 320:
+            return render_template("error.html", message="Email is too long") 
+        if len(mobile_nr) > 15:
+            return render_template("error.html", message="Mobile number is too long") 
+        if len(post_address) > 100:
+            return render_template("error.html", message="Post address is too long")     
         record_id = records.add_income(user_id, record_date, title, record_class_id, amount, price)
         records.add_invoice(record_id, customer, payment_term, iban, email, mobile_nr, post_address)
         return redirect("/")
