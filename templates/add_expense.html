@@ -5,9 +5,14 @@ Date: <input type="date" name="record_date" required>
 <p>
 Title: <input type="text" name="title" required>
 <p>
-Class: <input type="text" name="record_class" required>
+<label for="record_class">Class:</label>
+<select type="record_class" name="record_class" required>
+{% for record_class in classes %}
+    <option value="{{ record_class[0] }}">{{ record_class[1] }}</option>
+    {% endfor %}
+</select>
 <p>
-Price (€): <input type="number" name="price" required>
+Price (€): <input type="number" name="price" step=0.01 required>
 <p>
 <input type="submit" value="Save expense">
 <input type="hidden" name="user_id" value="{{ session.user_id }}">

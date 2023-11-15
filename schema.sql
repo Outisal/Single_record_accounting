@@ -11,8 +11,7 @@ CREATE TABLE favorites (
     email TEXT,
     mobile_nr TEXT,
     post_address TEXT,
-    payment_term INTEGER,
-    vat INTEGER
+    payment_term INTEGER
 );
 
 CREATE TABLE records (
@@ -22,8 +21,9 @@ CREATE TABLE records (
     title TEXT,
     record_type TEXT,
     record_class TEXT,
-    amount INTEGER,
-    price INTEGER
+    vat INTEGER,
+    amount DOUBLE PRECISION,
+    price DOUBLE PRECISION
 );
 
 CREATE TABLE invoice (
@@ -34,8 +34,7 @@ CREATE TABLE invoice (
     email TEXT,
     mobile_nr TEXT,
     post_address TEXT,
-    payment_term INTEGER,
-    vat INTEGER
+    payment_term INTEGER
 );
 
 CREATE TABLE record_class (

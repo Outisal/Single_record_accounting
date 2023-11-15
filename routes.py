@@ -46,7 +46,7 @@ def favorites():
         favorites = users.get_favorites()
         if favorites:
             return render_template("update_favorites.html", business_id = favorites.business_id, iban = favorites.iban, 
-                                   payment_term = favorites.payment_term, vat = favorites.vat, email = favorites.email, 
+                                   payment_term = favorites.payment_term, email = favorites.email, 
                                    mobile_nr = favorites.mobile_nr, post_address = favorites.post_address)
         return render_template("update_favorites.html")
     if request.method == "POST":
@@ -54,50 +54,51 @@ def favorites():
         business_id = request.form["business_id"]
         iban = request.form["iban"]
         payment_term = request.form["payment_term"] if request.form["payment_term"] else None
-        vat = request.form["vat"] if request.form["vat"] else None
         email = request.form["email"]
         mobile_nr = request.form["mobile_nr"]
         post_address =request.form["post_address"]
-        users.update_favorites(user_id, business_id, iban, payment_term, vat, email, mobile_nr, post_address)
+        users.update_favorites(user_id, business_id, iban, payment_term, email, mobile_nr, post_address)
         return redirect("/")
     
 @app.route("/add_expense", methods=["GET","POST"])
 def add_expense():
     if request.method == "GET":
-        return render_template("add_expense.html")
+        classes = records.get_record_classes("Expense")
+        return render_template("add_expense.html", classes = classes)
     if request.method == "POST":
         user_id = request.form["user_id"]
         record_date = request.form["record_date"]
         title = request.form["title"]
-        record_class = request.form["record_class"]
+        record_class_id = request.form["record_class"]
         price = request.form["price"]
-        records.add_expense(user_id, record_date, title, record_class, price)
+        records.add_expense(user_id, record_date, title, record_class_id, price)
         return redirect("/")
     
 @app.route("/add_income", methods=["GET","POST"])
 def add_income():
     if request.method == "GET":
         favorites = users.get_favorites()
+        classes = records.get_record_classes("Income")
         if favorites:
-            return render_template("add_income.html", iban = favorites.iban, payment_term = favorites.payment_term, 
-                               vat = favorites.vat, email = favorites.email, mobile_nr = favorites.mobile_nr, 
-                               post_address = favorites.post_address)
+            return render_template("add_income.html", classes = classes, iban = favorites.iban, payment_term = favorites.payment_term, 
+                               email = favorites.email, mobile_nr = favorites.mobile_nr, post_address = favorites.post_address)
+        else:
+            return render_template("add_income.html", classes = classes)
     if request.method == "POST":
         user_id = request.form["user_id"]
         record_date = request.form["record_date"]
-        record_class = request.form["record_class"]
+        record_class_id = request.form["record_class"]
         amount = request.form["amount"]
         price = request.form["price"]
         payment_term = request.form["payment_term"]
-        vat = request.form["vat"]
         customer = request.form["customer"]
         title = request.form["title"]
         iban = request.form["iban"]
         email = request.form["email"]
         mobile_nr = request.form["mobile_nr"]
         post_address =request.form["post_address"]
-        record_id = records.add_income(user_id, record_date, title, record_class, amount, price)
-        records.add_invoice(record_id, customer, payment_term, vat, iban, email, mobile_nr, post_address)
+        record_id = records.add_income(user_id, record_date, title, record_class_id, amount, price)
+        records.add_invoice(record_id, customer, payment_term, iban, email, mobile_nr, post_address)
         return redirect("/")
     
 @app.route("/records")

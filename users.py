@@ -37,22 +37,22 @@ def get_favorites():
     return result.fetchone()
 
 
-def update_favorites(user_id, business_id, iban, payment_term, vat, email, mobile_nr, post_address):
+def update_favorites(user_id, business_id, iban, payment_term, email, mobile_nr, post_address):
     sql = text("SELECT user_id FROM favorites WHERE user_id=:user_id")
     result = db.session.execute(sql, {"user_id":user_id})
     user = result.fetchone()
     if user: 
         sql = text("""UPDATE favorites SET business_id=:business_id, iban=:iban, payment_term=:payment_term, 
-                   vat=:vat, email=:email, mobile_nr=:mobile_nr, post_address=:post_address
+                   email=:email, mobile_nr=:mobile_nr, post_address=:post_address
                    WHERE user_id=:user_id""")
         db.session.execute(sql,{"user_id":user_id, "business_id":business_id, "iban":iban, "payment_term":payment_term,
-                                "vat":vat, "email":email, "mobile_nr":mobile_nr, "post_address":post_address})
+                                "email":email, "mobile_nr":mobile_nr, "post_address":post_address})
         db.session.commit()
     else:
-        sql = text("""INSERT INTO favorites (user_id, business_id, iban, payment_term, vat, email, mobile_nr, post_address) 
-                   VALUES (:user_id,:business_id,:iban,:payment_term,:vat,:email,:mobile_nr,:post_address)""")
+        sql = text("""INSERT INTO favorites (user_id, business_id, iban, payment_term, email, mobile_nr, post_address) 
+                   VALUES (:user_id,:business_id,:iban,:payment_term,:email,:mobile_nr,:post_address)""")
         db.session.execute(sql,{"user_id":user_id, "business_id":business_id, "iban":iban, "payment_term":payment_term,
-                                "vat":vat, "email":email, "mobile_nr":mobile_nr, "post_address":post_address})
+                                "email":email, "mobile_nr":mobile_nr, "post_address":post_address})
         db.session.commit()
 
 def username():

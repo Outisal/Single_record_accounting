@@ -22,10 +22,10 @@
                 {% endif %}
                 <td>{{row[3]}}</td> 
                 <td>{{row[4]}}</td> 
-                <td>{{row[5]}}</td> 
-                <td>0</td> 
-                <td>0</td> 
-                <td>0</td> 
+                <td>{{row[5]|round(2)}}</td> 
+                <td>{{row[6]}}%</td> 
+                <td>{{row[7]|round(2)}}</td> 
+                <td>{{ (row[7] + row[5])|round(2) }}</td>
             </tr> 
         {% endfor %} 
     </tbody> 

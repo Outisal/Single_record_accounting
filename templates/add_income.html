@@ -5,27 +5,30 @@ Date: <input type="date" name="record_date" required>
 <p>
 Title: <input type="text" name="title" required>
 <p>
-Class: <input type="text" name="record_class" required>
+<label for="record_class">Class:</label>
+<select type="record_class" name="record_class" required>
+    {% for record_class in classes %}
+        <option value="{{ record_class[0] }}">{{ record_class[1] }}</option>
+        {% endfor %}
+</select>
 <p>
 Customer: <input type="text" name="customer" required>
 <p>
-Amount (h): <input type="number" name="amount" required>
+Amount (h): <input type="number" name="amount" step=0.05 required>
 <p>
-Price (€): <input type="number" name="price" required>
+Price (€/h): <input type="number" name="price" step=0.01 required>
 <p>
 The following is prefilled based on your favorites. Change if needed.
 <p>
-IBAN: <input type="text" name="iban" value={{iban}} required>
+IBAN: <input type="text" name="iban" value="{{iban}}" required>
 <p>
 Payment term (days): <input type="number" name="payment_term" value={{payment_term}} required>
 <p>
-VAT (%): <input type="number" name="vat" value={{vat}} required>
+email: <input type="text" name="email" value="{{email}}" required>
 <p>
-email: <input type="text" name="email" value={{email}} required>
+mobile number: <input type="text" name="mobile_nr" value="{{mobile_nr}}" required>
 <p>
-mobile number: <input type="text" name="mobile_nr" value={{mobile_nr}} required>
-<p>
-post address: <input type="text" name="post_address" value={{post_address}} required>
+post address: <input type="text" name="post_address" value="{{post_address}}" required>
 <p>
 <input type="submit" value="Save income record">
 <input type="hidden" name="user_id" value="{{ session.user_id }}">
