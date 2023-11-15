@@ -43,7 +43,6 @@ def show_records():
                FROM records R LEFT JOIN invoice I ON I.record_id = R.id 
                WHERE R.user_id=:user_id""")
     records_data = db.session.execute(sql, {"user_id":user_id}).fetchall()
-    print(records_data)
     return records_data
 
 def get_record_classes(record_type):
