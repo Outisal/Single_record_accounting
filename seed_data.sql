@@ -1,3 +1,5 @@
+DELETE FROM record_class;
+
 INSERT INTO record_class (record_type, record_class, vat) 
                VALUES ('Expense', '333 Purchases and inventory changes', 24),
                     ('Expense', '334 External services', 24),
