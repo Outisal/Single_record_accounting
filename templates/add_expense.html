@@ -15,5 +15,6 @@ Title: <input type="text" name="title" required>
 Price (€): <input type="number" name="price" step=0.01 required>
 <p>
 <input type="submit" value="Save expense">
+<button type="button" onclick="window.location.href='/'">Cancel</button>
 <input type="hidden" name="user_id" value="{{ session.user_id }}">
 </form>
