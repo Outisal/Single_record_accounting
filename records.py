@@ -4,18 +4,7 @@ from flask import session
 from sqlalchemy.sql import text
 from werkzeug.security import check_password_hash, generate_password_hash
 
-def add_expense(user_id, record_date, title, record_class_id, price):
-    record_class_data = record_type_and_class(record_class_id)
-    record_type = record_class_data[0]
-    record_class = record_class_data[1]
-    vat = record_class_data[2]
-    sql = text("""INSERT INTO records (user_id, record_date, title, record_type, record_class, vat, amount, price)
-               VALUES(:user_id,:record_date,:title,:record_type,:record_class,:vat,:amount,:price)""")
-    db.session.execute(sql, {"user_id":user_id, "record_date":record_date, "title":title, "record_type":record_type,
-                             "record_class":record_class, "vat":vat, "amount":1, "price":price})
-    db.session.commit()
-
-def add_income(user_id, record_date, title, record_class_id, amount, price):
+def add_record(user_id, record_date, title, record_class_id, amount, price):
     record_class_data = record_type_and_class(record_class_id)
     record_type = record_class_data[0]
     record_class = record_class_data[1]
@@ -27,7 +16,8 @@ def add_income(user_id, record_date, title, record_class_id, amount, price):
                              "record_class":record_class, "vat":vat, "amount":amount, "price":price})
     record_id = result.fetchone()[0]
     db.session.commit()
-    return record_id
+    if record_type == "Income":
+        return record_id
 
 def add_invoice(record_id, customer, payment_term, iban, email, mobile_nr, post_address):
     sql = text("""INSERT INTO invoice (record_id, customer, payment_term, iban, email, mobile_nr, post_address) 

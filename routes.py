@@ -46,9 +46,7 @@ def favorites():
     if request.method == "GET":
         favorites = users.get_favorites()
         if favorites:
-            return render_template("update_favorites.html", business_id = favorites.business_id, iban = favorites.iban, 
-                                   payment_term = favorites.payment_term, email = favorites.email, 
-                                   mobile_nr = favorites.mobile_nr, post_address = favorites.post_address)
+            return render_template("update_favorites.html", f = favorites)
         return render_template("update_favorites.html")
     if request.method == "POST":
         user_id = request.form["user_id"]
@@ -83,12 +81,13 @@ def add_expense():
         record_date = request.form["record_date"]
         title = request.form["title"]
         record_class_id = request.form["record_class"]
+        amount = request.form["amount"]
         price = request.form["price"]
         if len(title) > 100:
             return render_template("error.html", message="Title is too long")
         if float(price) > 200000:
             return render_template("error.html", message="Price is too high")
-        records.add_expense(user_id, record_date, title, record_class_id, price)
+        records.add_record(user_id, record_date, title, record_class_id, amount, price)
         return redirect("/")
     
 @app.route("/add_income", methods=["GET","POST"])
@@ -132,7 +131,7 @@ def add_income():
             return render_template("error.html", message="Mobile number is too long") 
         if len(post_address) > 100:
             return render_template("error.html", message="Post address is too long")     
-        record_id = records.add_income(user_id, record_date, title, record_class_id, amount, price)
+        record_id = records.add_record(user_id, record_date, title, record_class_id, amount, price)
         records.add_invoice(record_id, customer, payment_term, iban, email, mobile_nr, post_address)
         return redirect("/")
     
@@ -146,7 +145,7 @@ def invoice(id):
     i_data = records.get_invoice_data(id)
     due_date = i_data.date + timedelta(days=i_data.payment_term)
     total_wo_vat = round(i_data.price * i_data.amount,2)
-    vat_price = round(00.1 * i_data.vat * total_wo_vat,2)
+    vat_price = round(0.01 * i_data.vat * total_wo_vat,2)
     total = vat_price + total_wo_vat
     return render_template("invoice.html", i = i_data, due_date = due_date, vat_price = vat_price, 
                            total = total, total_wo_vat = total_wo_vat)
