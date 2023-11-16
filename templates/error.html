@@ -1,3 +1,12 @@
-Error: {{ message }}
-<p>
-<button type="button" onclick="window.location.href='/'">Return home</button>
+<!DOCTYPE html>
+<link rel="stylesheet" href="/static/styles.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<form action="/register" method="POST">
+<div class="frame">
+  <img src="/static/logo.jpg" alt="logo">
+  <div class="info"><h2>Error</h2></div>
+  <div><p class="p_home">{{ message }}</p></div>
+  <div class="footer">
+    <button type="button" onclick="window.location.href='/'">Return home</button>
+  </div>
+</div>
