@@ -1,38 +1,47 @@
-<button type="button" onclick="window.location.href='/'">Return home</button>
-<button type="button" onclick="window.location.href='/add_income'">Add income</button>
-<button type="button" onclick="window.location.href='/add_expense'">Add expense</button>
-<table> 
-    <thead> 
-    <tr> 
+<!DOCTYPE html>
+<link rel="stylesheet" href="/static/styles.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<div class="frame_records">
+  <div class="info">
+    <button type="button" onclick="window.location.href='/'">Return home</button>
+    <button type="button" onclick="window.location.href='/add_income'">Add income</button>
+    <button type="button" onclick="window.location.href='/add_expense'">Add expense</button>
+  </div>
+  <div>
+    <table> 
+      <thead> 
+        <tr> 
         <th>Date</th> 
         <th>Title</th>
         <th>Type</th>
         <th>Class</th> 
-        <th>Taxfree sum</th> 
+        <th>Total wo. VAT</th> 
         <th>VAT %</th> 
         <th>VAT €</th> 
         <th>Total</th>  
-    </tr> 
-    </thead> 
-    <tbody> 
+        </tr> 
+      </thead> 
+      <tbody> 
         {% for row in value %}  
-            <tr> 
-                <td>{{row[0]}}</td> 
-                {% if row[2] == None %}
-                <td>{{ row[1] }}</td>
-                {% else %}
-                <td>{{ row[1] }}, invoice {{ row[2] }}</td>
-                {% endif %}
-                <td>{{row[3]}}</td> 
-                <td>{{row[4]}}</td> 
-                <td>{{row[5]|round(2)}}</td> 
-                <td>{{row[6]}}%</td> 
-                <td>{{row[7]|round(2)}}</td> 
-                <td>{{ (row[7] + row[5])|round(2) }}</td>
-                {% if row[2] != None %}
-                <td><a href="/invoice/{{ row[2] }}">View invoice</a></td>
-                {% endif %}
-            </tr> 
+          <tr> 
+            <td>{{row[0]}}</td> 
+            {% if row[2] == None %}
+              <td>{{ row[1] }}</td>
+            {% else %}
+              <td>{{ row[1] }}, invoice {{ row[2] }}</td>
+            {% endif %}
+            <td>{{row[3]}}</td> 
+            <td>{{row[4]}}</td> 
+            <td>{{row[5]|round(2)}}</td> 
+            <td>{{row[6]}}%</td> 
+            <td>{{row[7]|round(2)}}</td> 
+            <td>{{ (row[7] + row[5])|round(2) }}</td>
+            {% if row[2] != None %}
+              <td><nav><a href="/invoice/{{ row[2] }}">View invoice</a></nav></td>
+            {% endif %}
+          </tr> 
         {% endfor %} 
-    </tbody> 
-</table> 
+      </tbody> 
+    </table> 
+  </div>
+</div>

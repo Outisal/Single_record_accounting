@@ -12,25 +12,33 @@ input{
   font-size: 14px;
 }
 
-form input[type="submit"]{
+form input[type="submit"], button{
   display: inline-block;
   font-size: 14px;
   font-weight:500;
-  padding: 0.4em;
-  margin-left: 3em;
+  margin-right: 2em;
+  padding: .5em 1em;
+  border-radius: .5em;
+}
+
+nav a{
+  text-decoration: none;
+  font-size: 14px;
+  font-weight:400;
+  color: #000;
+  background:var(--white);
+  padding: .1em 1em;
+  border-radius: .5em;
+  border-style: solid;
+  border-color:var(--primary-clr);
+  border-width: 0.1em;
+  margin: 0;
+  line-height: 0;
 }
 
 option{
   display: table-cell;
   font-size: 14px;
-}
-
-button{
-  display: inline-block;
-  font-size: 14px;
-  font-weight:500;
-  padding: 0.4em;
-  margin-left: 1em;
 }
 
 div.row{
@@ -62,6 +70,23 @@ body {
 h3{
   line-height: 5;
 }
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  height: 20px;
+  text-align: left;
+  padding: 10px;
+  font-size: 14px;
+  line-height: 30px;
+  color: var(--primary-clr);
+  border-bottom: 1px solid #ddd;
+}
+
+tr:nth-child(even) {background-color: #f2f2f2;}
 
 .main_title{
   font-weight: 700;
@@ -105,6 +130,20 @@ h3{
   width: 100%;
   padding: 40px;
 }
+
+.frame_records {
+  width: 90%;
+  max-width: 100%;
+  height: auto;
+  background: var(--white);
+  margin: 20px auto;
+}
+  
+.frame_records > div{
+  width: 100%;
+  padding: 40px;
+}
+
   
 .frame .info .i_row,
 .frame .footer .i_row{
@@ -113,7 +152,8 @@ h3{
   
 .frame .info,
 .frame .invoice_terms,
-.frame .footer{
+.frame .footer,
+.frame_records .info{
   background: var(--invoice-bg);
 }
   
