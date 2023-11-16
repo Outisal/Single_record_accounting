@@ -1,10 +1,21 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="/static/styles.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <form action="/register" method="POST">
-Username: <input type="text" name="username">
-<p>
-Password: <input type="password" name="password1">
-<p>
-Repeat password: <input type="password" name="password2">
-<p>
-<input type="submit" value="Register">
-<button type="button" onclick="window.location.href='/'">Cancel</button>
+<div class="frame">
+  <img src="/static/logo.jpg" alt="logo">
+  <div class="info"><h2>Register</h2></div>
+  <div>
+    <div class=row><label>Username:</label><input type="text" name="username" required></div>
+    <div class=row><label>Password:</label><input type="password" name="password1" required></div>
+    <div class=row><label>Repeat password:</label><input type="password" name="password2" required></div>
+    <div class=row><label>Business name:</label><input type="business_name" name="business_name" required></div>
+    <div class=row><label>Business id:</label><input type="business_id" name="business_id" required></div>
+  </div>
+  <div class="footer">
+    <input type="submit" value="Register">
+    <button type="button" onclick="window.location.href='/'">Cancel</button>
+  </div>
+</div>
 </form>

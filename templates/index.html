@@ -1,23 +1,62 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="/static/styles.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 {% if session.username %}
-<p>You are signed in as {{ session.username }}</p>
-<a href="/update_favorites">Update favorites</a>
-<p>
-<a href="/logout">Log out</a>
-<p>
-<a href="/add_expense">Add expense</a>
-<p>
-<a href="/add_income">Add income</a>
-<p>
-<a href="/records">View records</a>
+<div class="frame">
+  <img src="/static/logo.jpg" alt="logo">
+  <div class="info">
+    <h1>Welcome to Single Record Accounting!</h1>
+    <p class="p_title">You are signed in as {{ session.username }}</p>
+  </div>
+  <links class="navigation_login">
+    <nav><a href="/update_favorites">Update favorites</a></nav>
+    <nav><a href="/add_expense">Add expense</a></nav>
+    <nav><a href="/add_income">Add income</a></nav>
+    <nav><a href="/records">Record View</a></nav>
+    <nav><a href="/logout">Account</a></nav>
+    <nav><a href="/logout">Log out</a></nav>
+  </links>
+ <div>
+  <p class="p_home">If it is your first time here, start by maintaining your default data through <b>'update favorites'</b> link. 
+    You can maintain the IBAN number, payment term, and contact information so that the application always suggests them to you 
+    by default when recording new income, saving you from unnecessary typing</p>
+  <p class="p_home">If it is time to record new <b>income</b> or <b>expense</b>, select the corresponding link from the top. 
+    You can also enter the record view, which includes links for adding both income and expenses.</p>
+  <p class="p_home"> On the <b>Record View</b>, you can review your income and expenses and open the invoice 
+    in a new browser window, allowing you to print it as a PDF.</p>
+  <p class="p_home">You can review your account information, i.e. business id and business name through <b>"Account" link</b>. You are 
+    able to update those but please note that it will affect to your accounting history as well. It might be that you want to make a small change to your
+    business name that does not matter from accounting history point of view or correct a type in your business id. However, if you are starting a new business,
+    please create a new user account for that (by logging out and registering with new information).</p>
+</div>
 
 {% else %}
-<h1>Welcome to Single Record Accounting App</h1>
-<p>The app can be used for single record accounting for small businesses in Finland. 
-    In Finland, single record accounting is allowed for businesses that meet at most one of the following conditions: 
-    The balance sheet total is over 200 000 euros, the revenue is over 200 000 euros or it employs at least 3 persons. 
-    The app is for recording incomes and expenses, creating pdf invoices and having a record view that includes all required information 
-    for the income statement.</p>
-You need to log in to get started. Please log in <a href="/login">here.</a>
-<p>
-If you don't have an account yet, you can register <a href="/register">here.</a>
+<div class="frame">
+  <img src="/static/logo.jpg" alt="logo">
+  <div class="info">
+    <h1>Welcome to Single Record Accounting!</h1>
+  </div>
+  <links class="navigation_logout">
+    <nav><a href="/login">Login</a></nav>
+    <nav><a href="/register">Register</a></nav>
+  </links>
+  <div>
+    <p class="p_home">Accounting is not a favorite activity for many. Single record accounting is already quite a word monster 
+      as a term. Many of us would be happier as small business operators without invoices and income statements.</p>
+    <p class="p_home">Single record accounting app lightens the load of accounting, leaving you with more time for the "real work." 
+      With this application, you can create income and expense lines using an easy form, which immediately updates your 
+      accounting view and generates invoice views from the income lines. Before you start, please make sure that single 
+      record accounting is sufficient for your business.</p>
+    <p class="p_home">In Finland, single record accounting is permitted for businesses that meet at most one of the following conditions:
+      <ul>
+        <li>The balance sheet total exceeds 200,000 euros</li>
+        <li>The revenue exceeds 200,000 euros</li>
+        <li>It employs at least 3 persons</li>
+      </ul>
+    </p>
+    <p class="p_home">If this sounds right to you, then let's get started!
+      To continue, you need to log in or register from the upper right corner.</p>
+  </div>
+</div>
 {% endif %}

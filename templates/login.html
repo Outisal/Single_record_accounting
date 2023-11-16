@@ -1,9 +1,21 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="/static/styles.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <form action="/login" method="POST">
-Username: <input type="text" name="username">
-<p>
-Password: <input type="password" name="password">
-<p>
-<input type="submit" value="Log in">
-<button type="button" onclick="window.location.href='/'">Cancel</button>
+
+<form action="/register" method="POST">
+<div class="frame">
+  <img src="/static/logo.jpg" alt="logo">
+  <div class="info"><h2>Login</h2></div>
+  <div>
+    <div class=row><label>Username:</label><input type="text" name="username"></div>
+    <div class=row><label>Password:</label><input type="password" name="password"></div>
+  </div>
+  <div class="footer">
+    <input type="submit" value="Log in">
+    <button type="button" onclick="window.location.href='/'">Cancel</button>
+    <p class=p_note>If you don't have an account yet, you can register <a href="/register">here</a></p>
+  </div>
+</div>
 </form>
-If you don't have an account yet, you can register <a href="/register">here</a>
