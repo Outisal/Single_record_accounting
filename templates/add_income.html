@@ -1,39 +1,39 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="/static/styles.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <form action="/add_income" method="POST" onsubmit="return check(this)">
-Add income:
-<p>
-Date: <input type="date" name="record_date" required> 
-<p>
-Title: <input type="text" name="title" required>
-<p>
-<label for="record_class">Class:</label>
-<select type="record_class" name="record_class" required>
-    {% for record_class in classes %}
-        <option value="{{ record_class[0] }}">{{ record_class[1] }}</option>
-        {% endfor %}
-</select>
-<p>
-Customer: <input type="text" name="customer" required>
-<p>
-Amount (h): <input type="number" name="amount" step=0.05 required>
-<p>
-Price (€/h): <input type="number" name="price" step=0.01 required>
-<p>
-The following is prefilled based on your favorites. Change if needed.
-<p>
-IBAN: <input type="text" name="iban" value="{{iban}}" required>
-<p>
-Payment term (days): <input type="number" name="payment_term" value={{payment_term}} required>
-<p>
-email: <input type="text" name="email" value="{{email}}" required>
-<p>
-mobile number: <input type="text" name="mobile_nr" value="{{mobile_nr}}" required>
-<p>
-post address: <input type="text" name="post_address" value="{{post_address}}" required>
-<p>
-<input type="submit" value="Save income record">
-<button type="button" onclick="window.location.href='/'">Cancel</button>
-<input type="hidden" name="user_id" value="{{ session.user_id }}">
-</form>
+
+<div class="frame">
+  <div class="info">
+    <h2>Add income:</h2>
+  </div>
+  <div>
+    <div class=row><label>Date:</label><input type="date" name="record_date" required></div>
+    <div class=row><label>Title:</label><input type="text" name="title" required></div>
+    <div class=row><label for="record_class">Class:</label>
+    <select type="record_class" name="record_class" required>
+        {% for record_class in classes %}
+            <option value="{{ record_class[0] }}">{{ record_class[1] }}</option>
+            {% endfor %}
+    </select></div>
+    <div class=row><label>Customer:</label><input type="text" name="customer" required></div>
+    <div class=row><label>Amount (h):</label><input type="number" name="amount" step=0.05 required></div>
+    <div class=row><label>Price (€/h):</label><input type="number" name="price" step=0.01 required></div>
+    <h3>The following is prefilled based on your favorites. Change if needed.</h3>
+    <div class=row><label>IBAN:</label><input type="text" name="iban" value="{{iban}}" required></div>
+    <div class=row><label>Payment term (days):</label><input type="number" name="payment_term" value={{payment_term}} required></div>
+    <div class=row><label>email:</label><input type="text" name="email" value="{{email}}" required></div>
+    <div class=row><label>mobile number:</label><input type="text" name="mobile_nr" value="{{mobile_nr}}" required></div>
+    <div class=row><label>post address:</label><input type="text" name="post_address" value="{{post_address}}" required></div>
+  </div>
+  <div class="footer">
+    <input type="submit" value="Save income">
+    <button type="button" onclick="window.location.href='/'">Cancel</button>
+    <input type="hidden" name="user_id" value="{{ session.user_id }}">
+    </form>
+  </div>
+</div>
 
 <script>
     function check(form) {

@@ -1,23 +1,31 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="/static/styles.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <form action="/add_expense" method="POST" onsubmit="return check(this)">
-Add expense:
-<p>
-Date: <input type="date" name="record_date" required> 
-<p>
-Title: <input type="text" name="title" required>
-<p>
-<label for="record_class">Class:</label>
-<select type="record_class" name="record_class" required>
-{% for record_class in classes %}
-    <option value="{{ record_class[0] }}">{{ record_class[1] }}</option>
-    {% endfor %}
-</select>
-<p>
-Price (€): <input type="number" name="price" step=0.01 required>
-<p>
-<input type="submit" value="Save expense">
-<button type="button" onclick="window.location.href='/'">Cancel</button>
-<input type="hidden" name="user_id" value="{{ session.user_id }}">
-</form>
+
+<div class="frame">
+  <div class="info">
+    <h2>Add expense:</h2>
+  </div>
+  <div>
+    <div class=row><label>Date:</label><input type="date" name="record_date" required></div>
+    <div class=row><label>Title:</label><input type="text" name="title" required></div>
+    <div class=row><label for="record_class">Class:</label>
+    <select type="record_class" name="record_class" required>
+    {% for record_class in classes %}
+        <option value="{{ record_class[0] }}">{{ record_class[1] }}</option>
+        {% endfor %}
+    </select></div>
+    <div class=row><label>Price (€):</label><input type="number" name="price" step=0.01 required></div>
+  </div>
+  <div class="footer">
+    <input type="submit" value="Save expense">
+    <button type="button" onclick="window.location.href='/'">Cancel</button>
+    <input type="hidden" name="user_id" value="{{ session.user_id }}">
+    </form>
+  </div>
+</div>
 
 <script>
     function check(form) {
