@@ -1,0 +1,158 @@
+label{
+  display: table-cell;
+  text-align: right;
+  font-size: 14px;
+  line-height: 40px;
+  padding: 0 40px;
+  font-weight: 500;
+}
+
+input{
+  display: table-cell;
+  font-size: 14px;
+}
+
+form input[type="submit"]{
+  display: inline-block;
+  font-size: 14px;
+  font-weight:500;
+  padding: 0.4em;
+  margin-left: 3em;
+}
+
+option{
+  display: table-cell;
+  font-size: 14px;
+}
+
+button{
+  display: inline-block;
+  font-size: 14px;
+  font-weight:500;
+  padding: 0.4em;
+  margin-left: 1em;
+}
+
+div.row{
+  display:table-row;
+}
+
+:root {
+    --bg-clr: #b3b3b3;
+    --white: #fff;
+    --invoice-bg: #e7e7e9;
+    --primary-clr: #2f2929;
+  }
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Ubuntu", sans-serif;
+}
+  
+body {
+  background: var(--bg-clr);
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--primary-clr);
+  padding: 0 20px;
+}
+  
+h3{
+  line-height: 5;
+}
+
+.main_title{
+  font-weight: 700;
+  font-size: 16px;
+  text-transform: uppercase;
+  color: var(--primary-clr);
+  margin-bottom: 10px;
+}
+  
+.p_title {
+  font-weight: 700;
+  font-size: 14px;
+}
+  
+.p_title > span{
+  font-weight: 400;
+  font-size: 14px;
+}
+  
+.text_right {
+  text-align: right;
+}
+  
+.text_center {
+  text-align: center;
+}
+  
+.i_row{
+  display: flex;
+}
+  
+.frame {
+  width: 800px;
+  max-width: 100%;
+  height: auto;
+  background: var(--white);
+  margin: 20px auto;
+}
+  
+.frame > div{
+  width: 100%;
+  padding: 40px;
+}
+  
+.frame .info .i_row,
+.frame .footer .i_row{
+  justify-content: space-between;
+}
+  
+.frame .info,
+.frame .invoice_terms,
+.frame .footer{
+  background: var(--invoice-bg);
+}
+  
+.frame .info > div:not(:last-child){
+  margin-bottom: 40px;
+} 
+  
+.frame .w_15 {
+  width: 15%;
+}
+  
+.frame .w_50 {
+  width: 50%;
+}
+  
+.frame .w_55 {
+  width: 55%;
+}
+  
+.frame .i_table .i_row {
+  padding: 12px 10px; 
+  border: 1px dashed var(--primary-clr); 
+  border-bottom: 0;
+}
+  
+.frame .i_table .i_table_foot .i_row:last-child{
+  border-bottom: 1px dashed var(--primary-clr);  
+}
+  
+.frame .i_table .i_row p{
+  margin: 0;
+  font-weight: 700;
+}
+  
+.frame .i_table .i_table_head .i_row,
+.frame .i_table .i_table_foot .grand_total_wrap{
+  background: var(--invoice-bg);
+}
+  
+.frame .invoice_right .terms{
+  margin: 0;
+}

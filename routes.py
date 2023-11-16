@@ -2,6 +2,7 @@ from app import app
 import users
 import records
 from flask import render_template, request, redirect
+from datetime import timedelta
 
 
 @app.route("/")
@@ -139,3 +140,13 @@ def add_income():
 def view_records():
     record_data = records.show_records()
     return render_template("records.html", value = record_data)
+
+@app.route("/invoice/<int:id>")
+def invoice(id):
+    i_data = records.get_invoice_data(id)
+    due_date = i_data.date + timedelta(days=i_data.payment_term)
+    total_wo_vat = round(i_data.price * i_data.amount,2)
+    vat_price = round(00.1 * i_data.vat * total_wo_vat,2)
+    total = vat_price + total_wo_vat
+    return render_template("invoice.html", i = i_data, due_date = due_date, vat_price = vat_price, 
+                           total = total, total_wo_vat = total_wo_vat)

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="/static/styles.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<body>
+
+<section>
+  <div class="frame">
+    <div class="info">
+      <div class="i_row">
+        <div class="p_title">
+          <p>Testi</p> #add business name
+          <p>{{i.post_address}}</p>
+        </div>
+        <div class="title">
+          <h2>Invoice</h2>
+        </div>
+      </div>
+      <div class="i_row">
+
+        <div class="i_to">
+          <div class="p_title">
+            <p>{{i.customer}}</p>
+          </div>
+        </div>
+        <div class="i_details text_right">
+          <div class="p_title">
+            <p>Invoice/Reference No:</p>
+            <span>{{i.id}}</span>
+          </div>
+          <div class="p_title">
+            <p>Invoice Date:</p>
+            <span>{{i.date}}</span>
+          </div>
+          <div class="p_title">
+            <p>Payment term:</p>
+            <span>{{i.payment_term}} days</span>
+          </div>
+          <div class="p_title">
+            <p>Due date:</p>
+            <span>{{due_date}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="invoice_table">
+      <div class="i_table">
+        <div class="i_table_head">
+          <div class="i_row">
+            <div class="i_col w_55">
+              <p class="p_title">DESCRIPTION</p>
+            </div>
+            <div class="i_col w_15 text_center">
+              <p class="p_title">QTY</p>
+            </div>
+            <div class="i_col w_15 text_center">
+              <p class="p_title">PRICE</p>
+            </div>
+            <div class="i_col w_15 text_center">
+				<p class="p_title">VAT%</p>
+			  </div>
+            <div class="i_col w_15 text_right">
+              <p class="p_title">TOTAL</p>
+            </div>
+          </div>
+        </div>
+        <div class="i_table_body">
+          <div class="i_row">
+            <div class="i_col w_55">
+              <p>{{i.title}}</p>
+            </div>
+            <div class="i_col w_15 text_center">
+              <p>{{i.amount}}</p>
+            </div>
+            <div class="i_col w_15 text_center">
+              <p>{{i.price}}</p>
+            </div>
+            <div class="i_col w_15 text_center">
+				      <p>{{i.vat}}</p>
+			      </div>
+            <div class="i_col w_15 text_right">
+              <p>{{total}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="i_table_foot">
+          <div class="i_row">
+            <div class="i_col w_50">
+              <p>Total without VAT</p>
+              <p>VAT</p>
+              <p>Due Total</p>
+            </div>
+            <div class="i_col w_50 text_right">
+              <p>{{total_wo_vat}}</p>
+              <p>{{vat_price}}</p>
+              <p>{{total}}</p>
+            </div>
+          </div>
+          <div class="i_row grand_total_wrap">
+            <div class="i_col w_50">
+              <p>GRAND TOTAL:</p>
+            </div>
+            <div class="i_col w_50 text_right">
+              <p>{{total}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="footer">
+      <div class="i_row">
+        <div class="i_payment">
+          <div class="p_title">
+            <p>IBAN:</p>
+            <span>{{i.iban}}</span>
+          </div>
+        </div>
+        <div class="i_duetotal text_right">
+          <div class="p_title">
+            <p>Business id:</p> #add business_id
+            <span>{{i.business_id}}</span>
+		  </div>
+		  <div class="p_title">
+			<p>email:</p>
+			<span>{{i.email}}</span>
+		  </div>
+		  <div class="p_title">
+			<p>mobile number:</p>
+			<span>{{i.mobile_nr}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+
+
