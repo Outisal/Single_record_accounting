@@ -6,16 +6,16 @@
 <div class="frame">
   <img src="/static/logo.jpg" alt="logo">
   <div class="info">
-    <h2>Maintain favorites for {{ session.username }}</h2>
+    <h2>Maintain Favorites for {{ session.username }}</h2>
   </div>
   <div>
-    <div class=row><label>Business-id:</label><input type="text" name="business_id" value={{f.business_id}}></div>
-    <div class=row><label>IBAN:</label><input type="text" name="iban" value={{f.iban}}></div>
-    <div class=row><label>Payment term (days):</label><input type="number" name="payment_term" value={{f.payment_term}}></div>
+    <div class=row><label><h3>Payment data:</h3></label></div>
+    <div class=row><label>IBAN:</label><input type="text" name="iban" value="{{f.iban}}"></div>
+    <div class=row><label>Payment term (days):</label><input type="number" name="payment_term" value="{{f.payment_term}}"></div>
     <div class=row><label><h3>Contact information:</h3></label></div>
-    <div class=row><label>email:</label><input type="text" name="email" value={{f.email}}></div>
-    <div class=row><label>mobile number:</label><input type="text" name="mobile_nr" value={{f.mobile_nr}}></div>
-    <div class=row><label>post address:</label><input type="text" name="post_address" value={{f.post_address}}></div>
+    <div class=row><label>email:</label><input type="text" name="email" value="{{f.email}}"></div>
+    <div class=row><label>mobile number:</label><input type="text" name="mobile_nr" value="{{f.mobile_nr}}"></div>
+    <div class=row><label>post address:</label><input type="text" name="post_address" value="{{f.post_address}}"></div>
   </div>
   <div class="footer">
     <input type="submit" value="Save favorites">
@@ -27,10 +27,6 @@
 
 <script>
     function check(form) {
-        if (form.business_id.value.length > 100) {
-            alert("Business id is too long");
-            return false;
-        }
         if (form.iban.value.length > 34) {
             alert("IBAN is too long");
             return false;

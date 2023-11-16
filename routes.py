@@ -34,23 +34,38 @@ def register():
         username = request.form["username"]
         password1 = request.form["password1"]
         password2 = request.form["password2"]
+        business_name = request.form["business_name"]
+        business_id = request.form["business_id"]
         if password1 != password2:
             return render_template("error.html", message="passwords don't match")
-        if users.register(username, password1):
+        if users.register(username, password1, business_name, business_id):
             return redirect("/")
         else:   
-            return render_template("error.html", message="Registeration failed")
+            return render_template("error.html", message="Registeration failed.")
+        
+@app.route("/update_account_data",methods=["GET","POST"])
+def maintain_account():
+    if request.method == "GET":
+        account_data = users.get_account_data()
+        return render_template("update_account_data.html", a = account_data)
+    if request.method == "POST":
+        user_id = request.form["user_id"]
+        business_name = request.form["business_name"]
+        business_id = request.form["business_id"]
+        if len(business_name) > 100:
+            return render_template("error.html", message="Business name is too long")   
+        if len(business_id) > 100:
+            return render_template("error.html", message="Business id is too long")
+        users.update_account_data(user_id, business_name, business_id)
+        return redirect("/") 
         
 @app.route("/update_favorites", methods=["GET","POST"])
 def favorites():
     if request.method == "GET":
         favorites = users.get_favorites()
-        if favorites:
-            return render_template("update_favorites.html", f = favorites)
-        return render_template("update_favorites.html")
+        return render_template("update_favorites.html", f = favorites)
     if request.method == "POST":
         user_id = request.form["user_id"]
-        business_id = request.form["business_id"]
         iban = request.form["iban"]
         payment_term = request.form["payment_term"] if request.form["payment_term"] else None
         email = request.form["email"]
@@ -59,16 +74,14 @@ def favorites():
         if len(iban) > 34:
             return render_template("error.html", message="IBAN is too long")
         if float(payment_term) > 300:
-            return render_template("error.html", message="Payment term should be less than 300 days")       
-        if len(business_id) > 100:
-            return render_template("error.html", message="Business id is too long")    
+            return render_template("error.html", message="Payment term should be less than 300 days")         
         if len(email) > 320:
             return render_template("error.html", message="Email is too long") 
         if len(mobile_nr) > 15:
             return render_template("error.html", message="Mobile number is too long") 
         if len(post_address) > 100:
             return render_template("error.html", message="Post address is too long")   
-        users.update_favorites(user_id, business_id, iban, payment_term, email, mobile_nr, post_address)
+        users.update_favorites(user_id, iban, payment_term, email, mobile_nr, post_address)
         return redirect("/")
     
 @app.route("/add_expense", methods=["GET","POST"])

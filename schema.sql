@@ -1,13 +1,15 @@
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username TEXT UNIQUE,
-    password TEXT
+    password TEXT,
+    business_name TEXT,
+    business_id TEXT
 );
+
 CREATE TABLE favorites (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users,
     iban TEXT,
-    business_id TEXT,
     email TEXT,
     mobile_nr TEXT,
     post_address TEXT,

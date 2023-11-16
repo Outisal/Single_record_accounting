@@ -48,9 +48,10 @@ def record_type_and_class(id):
 def get_invoice_data(id):
     sql = text("""SELECT I.id id, I.customer customer, I.iban iban, I.email email, 
                I.post_address post_address, I.mobile_nr mobile_nr, I.payment_term payment_term,
-               R.title title, R.vat vat, R.amount amount, R.price price, R.record_date date
-               FROM invoice I LEFT JOIN records R ON I.record_id = R.id
+               R.title title, R.vat vat, R.amount amount, R.price price, R.record_date date,
+               U.business_name business_name, U.business_id business_id
+               FROM invoice I LEFT JOIN records R ON I.record_id = R.id 
+               LEFT JOIN users U ON R.user_id = U.id
                WHERE I.id=:id""")
     invoice_data = db.session.execute(sql, {"id":id}).fetchone()
-    print(invoice_data)
     return invoice_data
