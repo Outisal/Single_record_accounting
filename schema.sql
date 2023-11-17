@@ -21,7 +21,7 @@ CREATE TABLE records (
     user_id INTEGER REFERENCES users,
     record_date DATE,
     title TEXT,
-    record_type TEXT,
+    record_type INTEGER,
     record_class TEXT,
     vat INTEGER,
     amount DOUBLE PRECISION,
@@ -41,7 +41,7 @@ CREATE TABLE invoice (
 
 CREATE TABLE record_class (
     id SERIAL PRIMARY KEY,
-    record_type TEXT,
+    record_type INTEGER,
     record_class TEXT,
     vat INTEGER
 );

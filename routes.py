@@ -87,7 +87,7 @@ def favorites():
 @app.route("/add_expense", methods=["GET","POST"])
 def add_expense():
     if request.method == "GET":
-        classes = records.get_record_classes("Expense")
+        classes = records.get_record_classes(1)
         return render_template("add_expense.html", classes = classes)
     if request.method == "POST":
         user_id = request.form["user_id"]
@@ -101,16 +101,15 @@ def add_expense():
         if float(price) > 200000:
             return render_template("error.html", message="Price is too high")
         records.add_record(user_id, record_date, title, record_class_id, amount, price)
-        return redirect("/")
+        return redirect("/records")
     
 @app.route("/add_income", methods=["GET","POST"])
 def add_income():
     if request.method == "GET":
         favorites = users.get_favorites()
-        classes = records.get_record_classes("Income")
+        classes = records.get_record_classes(2)
         if favorites:
-            return render_template("add_income.html", classes = classes, iban = favorites.iban, payment_term = favorites.payment_term, 
-                               email = favorites.email, mobile_nr = favorites.mobile_nr, post_address = favorites.post_address)
+            return render_template("add_income.html", classes = classes, f=favorites)
         else:
             return render_template("add_income.html", classes = classes)
     if request.method == "POST":
@@ -146,7 +145,7 @@ def add_income():
             return render_template("error.html", message="Post address is too long")     
         record_id = records.add_record(user_id, record_date, title, record_class_id, amount, price)
         records.add_invoice(record_id, customer, payment_term, iban, email, mobile_nr, post_address)
-        return redirect("/")
+        return redirect("/records")
     
 @app.route("/records")
 def view_records():

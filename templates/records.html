@@ -28,18 +28,20 @@
             <td>{{row[0]}}</td> 
             {% if row[2] == None %}
               <td>{{ row[1] }}</td>
+              <td>Expense</td>
             {% else %}
               <td>{{ row[1] }}, invoice {{ row[2] }}</td>
+              <td>Income</td>
             {% endif %}
-            <td>{{row[3]}}</td> 
             <td>{{row[4]}}</td> 
             <td>{{row[5]|round(2)}}</td> 
             <td>{{row[6]}}%</td> 
             <td>{{row[7]|round(2)}}</td> 
             <td>{{ (row[7] + row[5])|round(2) }}</td>
             {% if row[2] != None %}
-              <td><nav><a href="/invoice/{{ row[2] }}">View invoice</a></nav></td>
+              <td><nav><a target="_blank" rel="noopener" href="/invoice/{{ row[2] }}">View invoice</a></nav></td>
             {% endif %}
+              <td><nav><a href="/remove_record/{{row}}">View invoice</a></nav></td>
           </tr> 
         {% endfor %} 
       </tbody> 

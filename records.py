@@ -16,7 +16,7 @@ def add_record(user_id, record_date, title, record_class_id, amount, price):
                              "record_class":record_class, "vat":vat, "amount":amount, "price":price})
     record_id = result.fetchone()[0]
     db.session.commit()
-    if record_type == "Income":
+    if record_type == 2:
         return record_id
 
 def add_invoice(record_id, customer, payment_term, iban, email, mobile_nr, post_address):
