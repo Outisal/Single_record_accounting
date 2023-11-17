@@ -16,10 +16,10 @@
         <th>Title</th>
         <th>Type</th>
         <th>Class</th> 
-        <th>Total wo. VAT</th> 
+        <th>Total € wo. VAT</th> 
         <th>VAT %</th> 
         <th>VAT €</th> 
-        <th>Total</th>  
+        <th>Total €</th>  
         </tr> 
       </thead> 
       <tbody> 
@@ -40,8 +40,12 @@
             <td>{{ (row[7] + row[5])|round(2) }}</td>
             {% if row[2] != None %}
               <td><nav><a target="_blank" rel="noopener" href="/invoice/{{ row[2] }}">View invoice</a></nav></td>
+              <td><nav><a href="/update_income/{{row[8]}}">Edit</a></nav></td>
+            {%else%}
+              <td></td>
+              <td><nav><a href="/update_expense/{{row[8]}}">Edit</a></nav></td>
             {% endif %}
-              <td><nav><a href="/remove_record/{{row}}">View invoice</a></nav></td>
+              <td><nav><a href="/remove_record/{{row[8]}}">Remove</a></nav></td>
           </tr> 
         {% endfor %} 
       </tbody> 

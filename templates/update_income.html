@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="/static/styles.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<form action="/update_income/{{r.id}}" method="POST" onsubmit="return check(this)">
+
+<div class="frame">
+  <img src="/static/logo.jpg" alt="logo">
+  <div class="info">
+    <h2>Update income:</h2>
+  </div>
+  <div>
+    <div class=row><label>Date:</label><input type="date" name="record_date" value="{{i.date}}" required></div>
+    <div class=row><label>Title:</label><input type="text" name="title" value="{{i.title}}" required></div>
+    <div class=row><label for="record_class"><b>Note! Always reselect class:</b></label>
+    <select type="record_class" name="record_class" required>
+    {% for record_class in classes %}
+      <option value="{{ record_class[0] }}">{{ record_class[1] }}</option>
+    {% endfor %}
+    </select></div>
+    <div class=row><label>Customer:</label><input type="text" name="customer" value="{{i.customer}}" required></div>
+    <div class=row><label>Amount (h):</label><input type="number" name="amount" step=0.05 value="{{i.amount}}" required></div>
+    <div class=row><label>Price (€/h):</label><input type="number" name="price" step=0.01 value="{{i.price}}" required></div>
+    <div class=row><label>IBAN:</label><input type="text" name="iban" value="{{i.iban}}" required></div>
+    <div class=row><label>Payment term (days):</label><input type="number" name="payment_term" value={{i.payment_term}} required></div>
+    <div class=row><label>email:</label><input type="text" name="email" value="{{i.email}}" required></div>
+    <div class=row><label>mobile number:</label><input type="text" name="mobile_nr" value="{{i.mobile_nr}}" required></div>
+    <div class=row><label>post address:</label><input type="text" name="post_address" value="{{i.post_address}}" required></div>
+  </div>
+  <div class="footer">
+    <input type="submit" value="Save changes">
+    <button type="button" onclick="window.location.href='/records'">Cancel</button>
+    <input type="hidden" name="user_id" value="{{ session.user_id }}">
+    </form>
+  </div>
+</div>
+
+<script>
+    function check(form) {
+        if (form.title.value.length > 100) {
+            alert("Title is too long");
+            return false;
+        }
+        if (form.customer.value.length > 100) {
+            alert("Customer name is too long");
+            return false;
+        }
+        if (parseFloat(form.amount.value) > 1000) {
+            alert("Amount (h) is too high");
+            return false;
+        }
+        if (parseFloat(form.price.value) > 200000) {
+            alert("Price is too high");
+            return false;
+        }
+        if (form.iban.value.length > 34) {
+            alert("IBAN is too long");
+            return false;
+        }
+        if (parseFloat(form.payment_term.value) > 300) {
+            alert("Payment term should be less than 300 days");
+            return false;
+        }
+        if (form.email.value.length > 320) {
+            alert("Email is too long");
+            return false;
+        }
+        if (form.mobile_nr.value.length > 15) {
+            alert("Mobile number is too long");
+            return false;
+        }
+        if (form.post_address.value.length > 100) {
+            alert("Post address is too long");
+            return false;
+        }
+        return true;
+    }
+    </script>

@@ -102,6 +102,25 @@ def add_expense():
             return render_template("error.html", message="Price is too high")
         records.add_record(user_id, record_date, title, record_class_id, amount, price)
         return redirect("/records")
+
+@app.route("/update_expense/<int:id>", methods=["GET","POST"])
+def update_expense(id):
+    record_data = records.get_record_data(id)
+    if request.method == "GET":
+        classes = records.get_record_classes(1)
+        return render_template("update_expense.html", classes = classes, r = record_data)
+    if request.method == "POST":
+        record_date = request.form["record_date"]
+        title = request.form["title"]
+        record_class_id = request.form["record_class"]
+        amount = request.form["amount"]
+        price = request.form["price"]
+        if len(title) > 100:
+            return render_template("error.html", message="Title is too long")
+        if float(price) > 200000:
+            return render_template("error.html", message="Price is too high")
+        records.update_record_data(record_data.id, record_date, title, record_class_id, amount, price)
+        return redirect("/records")
     
 @app.route("/add_income", methods=["GET","POST"])
 def add_income():
@@ -147,6 +166,48 @@ def add_income():
         records.add_invoice(record_id, customer, payment_term, iban, email, mobile_nr, post_address)
         return redirect("/records")
     
+@app.route("/update_income/<int:id>", methods=["GET","POST"])
+def update_income(id):
+    if request.method == "GET":
+        record_data = records.get_record_data(id)
+        invoice_id = records.get_invoice_id(id)
+        invoice_data = records.get_invoice_data(invoice_id)
+        classes = records.get_record_classes(2)
+        return render_template("update_income.html", classes = classes, i = invoice_data, r = record_data)
+    if request.method == "POST":
+        record_date = request.form["record_date"]
+        record_class_id = request.form["record_class"]
+        amount = request.form["amount"]
+        price = request.form["price"]
+        payment_term = request.form["payment_term"]
+        customer = request.form["customer"]
+        title = request.form["title"]
+        iban = request.form["iban"]
+        email = request.form["email"]
+        mobile_nr = request.form["mobile_nr"]
+        post_address =request.form["post_address"]
+        if len(title) > 100:
+            return render_template("error.html", message="Title is too long")
+        if float(amount) > 1000:
+            return render_template("error.html", message="Amount is too high")
+        if float(price) > 200000:
+            return render_template("error.html", message="Price is too high")
+        if len(iban) > 34:
+            return render_template("error.html", message="IBAN is too long")
+        if float(payment_term) > 300:
+            return render_template("error.html", message="Payment term should be less than 300 days")       
+        if len(customer) > 100:
+            return render_template("error.html", message="Customer name is too long")    
+        if len(email) > 320:
+            return render_template("error.html", message="Email is too long") 
+        if len(mobile_nr) > 15:
+            return render_template("error.html", message="Mobile number is too long") 
+        if len(post_address) > 100:
+            return render_template("error.html", message="Post address is too long")     
+        records.update_record_data(id, record_date, title, record_class_id, amount, price)
+        records.update_invoice(id, customer, payment_term, iban, email, mobile_nr, post_address)
+        return redirect("/records")
+    
 @app.route("/records")
 def view_records():
     record_data = records.show_records()
@@ -156,8 +217,21 @@ def view_records():
 def invoice(id):
     i_data = records.get_invoice_data(id)
     due_date = i_data.date + timedelta(days=i_data.payment_term)
-    total_wo_vat = round(i_data.price * i_data.amount,2)
-    vat_price = round(0.01 * i_data.vat * total_wo_vat,2)
+    total_wo_vat = round(i_data.price * i_data.amount, 2)
+    vat_price = round(0.01 * i_data.vat * total_wo_vat, 2)
     total = vat_price + total_wo_vat
     return render_template("invoice.html", i = i_data, due_date = due_date, vat_price = vat_price, 
                            total = total, total_wo_vat = total_wo_vat)
+
+@app.route("/remove_record/<int:id>", methods=["GET","POST"])
+def remove_record(id):
+    record_data = records.get_record_data(id)
+    if request.method == "GET":
+        total_wo_vat = round(record_data.price * record_data.amount, 2)
+        vat_price = round(0.01 * record_data.vat * total_wo_vat, 2)
+        total = round(total_wo_vat + vat_price, 2)
+        return render_template("remove_record.html", r = record_data, total_wo_vat = total_wo_vat, vat_price = vat_price, total = total)
+    if request.method == "POST":
+        records.remove_record_data(id, record_data.record_type)
+        return redirect("/records")
+    

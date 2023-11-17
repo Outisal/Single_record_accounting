@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="/static/styles.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<form action="/remove_record/{{r.id}}" method="POST">
+<div class="frame">
+  <img src="/static/logo.jpg" alt="logo">
+  <div class="info">
+    <h1>Are you sure that you want to delete the following record?</h1>
+  </div>
+  <div>
+    {% if r.record_type == 2 %}
+      <p class="p_home">Note that also related invoice will be removed</p>
+    {%endif%}
+    <table>
+      <tr>
+        <th>Date</th>
+        <td>{{r.record_date}}</td>
+      </tr>
+      <tr>
+        <th>Title</th>
+        <td>{{r.title}}</td>
+      </tr>
+      <tr>
+        <th>Record type</th>
+        {% if r.record_type == 2 %}
+          <td>Income</td>
+        {%else%}
+        <td>Expense</td>
+        {%endif%}
+      </tr>
+      <tr>
+        <th>Record Class</th>
+        <td>{{r.record_class}}</td>
+      </tr>
+      <tr>
+        <th>Total € wo vat</th>
+        <td>{{total_wo_vat}}</td>
+      </tr>
+      <tr>
+        <th>VAT €</th>
+        <td>{{vat_price}}</td>
+      </tr>
+      <tr>
+        <th>Total €</th>
+        <td>{{total}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="footer">
+    <input type="submit" value="Remove record">
+    <button type="button" onclick="window.location.href='/records'">Cancel</button>
+  </div>
+</div>       
+</form>
