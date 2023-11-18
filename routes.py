@@ -1,9 +1,8 @@
+from datetime import timedelta
+from flask import render_template, request, redirect
 from app import app
 import users
 import records
-from flask import render_template, request, redirect
-from datetime import timedelta
-
 
 @app.route("/")
 def index():
@@ -18,8 +17,7 @@ def login():
         password = request.form["password"]
         if users.login(username, password):
             return redirect("/")
-        else:
-            return render_template("error.html", message="Incorrect username or password")
+        return render_template("error.html", message="Incorrect username or password")
 
 @app.route("/logout")
 def logout():
@@ -40,9 +38,8 @@ def register():
             return render_template("error.html", message="passwords don't match")
         if users.register(username, password1, business_name, business_id):
             return redirect("/")
-        else:   
-            return render_template("error.html", message="Registeration failed.")
-        
+        return render_template("error.html", message="Registeration failed.")
+
 @app.route("/update_account_data",methods=["GET","POST"])
 def maintain_account():
     if request.method == "GET":
@@ -53,19 +50,18 @@ def maintain_account():
         business_name = request.form["business_name"]
         business_id = request.form["business_id"]
         if len(business_name) > 100:
-            return render_template("error.html", message="Business name is too long")   
+            return render_template("error.html", message="Business name is too long")
         if len(business_id) > 100:
             return render_template("error.html", message="Business id is too long")
         users.update_account_data(user_id, business_name, business_id)
-        return redirect("/") 
-        
+        return redirect("/")
+
 @app.route("/update_favorites", methods=["GET","POST"])
 def favorites():
     if request.method == "GET":
-        favorites = users.get_favorites()
-        return render_template("update_favorites.html", f = favorites)
+        favorites_now = users.get_favorites()
+        return render_template("update_favorites.html", f = favorites_now)
     if request.method == "POST":
-        user_id = request.form["user_id"]
         iban = request.form["iban"]
         payment_term = request.form["payment_term"] if request.form["payment_term"] else None
         email = request.form["email"]
@@ -74,67 +70,78 @@ def favorites():
         if len(iban) > 34:
             return render_template("error.html", message="IBAN is too long")
         if float(payment_term) > 300:
-            return render_template("error.html", message="Payment term should be less than 300 days")         
+            return render_template("error.html",
+                                   message="Payment term should be less than 300 days")
         if len(email) > 320:
-            return render_template("error.html", message="Email is too long") 
+            return render_template("error.html", message="Email is too long")
         if len(mobile_nr) > 15:
-            return render_template("error.html", message="Mobile number is too long") 
+            return render_template("error.html", message="Mobile number is too long")
         if len(post_address) > 100:
-            return render_template("error.html", message="Post address is too long")   
-        users.update_favorites(user_id, iban, payment_term, email, mobile_nr, post_address)
+            return render_template("error.html", message="Post address is too long")
+        new_favorites = users.Favorites
+        new_favorites.user_id = request.form["user_id"]
+        new_favorites.iban = iban
+        new_favorites.payment_term = payment_term
+        new_favorites.email = email
+        new_favorites.mobile_nr = mobile_nr
+        new_favorites.post_address = post_address
+        users.update_favorites(new_favorites)
         return redirect("/")
-    
+
 @app.route("/add_expense", methods=["GET","POST"])
 def add_expense():
     if request.method == "GET":
         classes = records.get_record_classes(1)
         return render_template("add_expense.html", classes = classes)
     if request.method == "POST":
-        user_id = request.form["user_id"]
-        record_date = request.form["record_date"]
         title = request.form["title"]
-        record_class_id = request.form["record_class"]
-        amount = request.form["amount"]
         price = request.form["price"]
         if len(title) > 100:
             return render_template("error.html", message="Title is too long")
         if float(price) > 200000:
             return render_template("error.html", message="Price is too high")
-        records.add_record(user_id, record_date, title, record_class_id, amount, price)
+        expense = records.Record()
+        expense.user_id = request.form["user_id"]
+        expense.record_date = request.form["record_date"]
+        expense.title = title
+        expense.record_class = request.form["record_class"]
+        expense.amount = request.form["amount"]
+        expense.price = price
+        records.add_record(expense)
         return redirect("/records")
 
-@app.route("/update_expense/<int:id>", methods=["GET","POST"])
-def update_expense(id):
-    record_data = records.get_record_data(id)
+@app.route("/update_expense/<int:record_id>", methods=["GET","POST"])
+def update_expense(record_id):
+    record_data = records.get_record_data(record_id)
     if request.method == "GET":
         classes = records.get_record_classes(1)
         return render_template("update_expense.html", classes = classes, r = record_data)
     if request.method == "POST":
-        record_date = request.form["record_date"]
         title = request.form["title"]
-        record_class_id = request.form["record_class"]
-        amount = request.form["amount"]
         price = request.form["price"]
         if len(title) > 100:
             return render_template("error.html", message="Title is too long")
         if float(price) > 200000:
             return render_template("error.html", message="Price is too high")
-        records.update_record_data(record_data.id, record_date, title, record_class_id, amount, price)
+        expense = records.Record()
+        expense.record_id = record_id
+        expense.record_date = request.form["record_date"]
+        expense.title = title
+        expense.record_class = request.form["record_class"]
+        expense.amount = request.form["amount"]
+        expense.price = price
+        records.update_record_data(expense)
         return redirect("/records")
-    
+
 @app.route("/add_income", methods=["GET","POST"])
 def add_income():
     if request.method == "GET":
-        favorites = users.get_favorites()
+        favorites_now = users.get_favorites()
         classes = records.get_record_classes(2)
-        if favorites:
-            return render_template("add_income.html", classes = classes, f=favorites)
-        else:
-            return render_template("add_income.html", classes = classes)
+        if favorites_now:
+            return render_template("add_income.html", classes = classes, f = favorites_now)
+        return render_template("add_income.html", classes = classes)
     if request.method == "POST":
-        user_id = request.form["user_id"]
-        record_date = request.form["record_date"]
-        record_class_id = request.form["record_class"]
         amount = request.form["amount"]
         price = request.form["price"]
         payment_term = request.form["payment_term"]
@@ -153,30 +160,44 @@ def add_income():
         if len(iban) > 34:
             return render_template("error.html", message="IBAN is too long")
         if float(payment_term) > 300:
-            return render_template("error.html", message="Payment term should be less than 300 days")       
+            return render_template("error.html",
+                                   message="Payment term should be less than 300 days")
         if len(customer) > 100:
-            return render_template("error.html", message="Customer name is too long")    
+            return render_template("error.html", message="Customer name is too long")
         if len(email) > 320:
-            return render_template("error.html", message="Email is too long") 
+            return render_template("error.html", message="Email is too long")
         if len(mobile_nr) > 15:
-            return render_template("error.html", message="Mobile number is too long") 
+            return render_template("error.html", message="Mobile number is too long")
         if len(post_address) > 100:
-            return render_template("error.html", message="Post address is too long")     
-        record_id = records.add_record(user_id, record_date, title, record_class_id, amount, price)
-        records.add_invoice(record_id, customer, payment_term, iban, email, mobile_nr, post_address)
+            return render_template("error.html", message="Post address is too long")
+        income = records.Record()
+        invoice = records.Invoice()
+        income.user_id = request.form["user_id"]
+        income.record_date = request.form["record_date"]
+        income.record_class = request.form["record_class"]
+        income.title = title
+        income.amount = amount
+        income.price = price
+        invoice.payment_term = payment_term
+        invoice.customer = customer
+        invoice.iban = iban
+        invoice.email = email
+        invoice.mobile_nr = mobile_nr
+        invoice.post_address = post_address
+        invoice.record_id = records.add_record(income)
+        records.add_invoice(invoice)
         return redirect("/records")
-    
-@app.route("/update_income/<int:id>", methods=["GET","POST"])
-def update_income(id):
+
+@app.route("/update_income/<int:record_id>", methods=["GET","POST"])
+def update_income(record_id):
     if request.method == "GET":
-        record_data = records.get_record_data(id)
-        invoice_id = records.get_invoice_id(id)
+        record_data = records.get_record_data(record_id)
+        invoice_id = records.get_invoice_id(record_id)
         invoice_data = records.get_invoice_data(invoice_id)
         classes = records.get_record_classes(2)
-        return render_template("update_income.html", classes = classes, i = invoice_data, r = record_data)
+        return render_template("update_income.html", classes = classes,
+                               i = invoice_data, r = record_data)
     if request.method == "POST":
-        record_date = request.form["record_date"]
-        record_class_id = request.form["record_class"]
         amount = request.form["amount"]
         price = request.form["price"]
         payment_term = request.form["payment_term"]
@@ -195,43 +216,60 @@ def update_income(id):
         if len(iban) > 34:
             return render_template("error.html", message="IBAN is too long")
         if float(payment_term) > 300:
-            return render_template("error.html", message="Payment term should be less than 300 days")       
+            return render_template("error.html",
+                                   message="Payment term should be less than 300 days")
         if len(customer) > 100:
-            return render_template("error.html", message="Customer name is too long")    
+            return render_template("error.html", message="Customer name is too long")
         if len(email) > 320:
-            return render_template("error.html", message="Email is too long") 
+            return render_template("error.html", message="Email is too long")
         if len(mobile_nr) > 15:
-            return render_template("error.html", message="Mobile number is too long") 
+            return render_template("error.html", message="Mobile number is too long")
         if len(post_address) > 100:
-            return render_template("error.html", message="Post address is too long")     
-        records.update_record_data(id, record_date, title, record_class_id, amount, price)
-        records.update_invoice(id, customer, payment_term, iban, email, mobile_nr, post_address)
+            return render_template("error.html", message="Post address is too long")
+        income = records.Record()
+        invoice = records.Invoice()
+        income.record_id = record_id
+        income.record_date = request.form["record_date"]
+        income.record_class = request.form["record_class"]
+        income.title = title
+        income.amount = amount
+        income.price = price
+        invoice.record_id = record_id
+        invoice.customer = customer
+        invoice.payment_term = payment_term
+        invoice.iban = iban
+        invoice.email = email
+        invoice.mobile_nr = mobile_nr
+        invoice.post_address = post_address
+        records.update_record_data(income)
+        records.update_invoice(invoice)
         return redirect("/records")
-    
+
 @app.route("/records")
 def view_records():
     record_data = records.show_records()
     return render_template("records.html", value = record_data)
 
-@app.route("/invoice/<int:id>")
-def invoice(id):
-    i_data = records.get_invoice_data(id)
+@app.route("/invoice/<int:invoice_id>")
+def invoice(invoice_id):
+    i_data = records.get_invoice_data(invoice_id)
     due_date = i_data.date + timedelta(days=i_data.payment_term)
     total_wo_vat = round(i_data.price * i_data.amount, 2)
     vat_price = round(0.01 * i_data.vat * total_wo_vat, 2)
     total = vat_price + total_wo_vat
-    return render_template("invoice.html", i = i_data, due_date = due_date, vat_price = vat_price, 
+    return render_template("invoice.html", i = i_data, due_date = due_date, vat_price = vat_price,
                            total = total, total_wo_vat = total_wo_vat)
 
-@app.route("/remove_record/<int:id>", methods=["GET","POST"])
-def remove_record(id):
-    record_data = records.get_record_data(id)
+@app.route("/remove_record/<int:record_id>", methods=["GET","POST"])
+def remove_record(record_id):
+    record_data = records.get_record_data(record_id)
     if request.method == "GET":
         total_wo_vat = round(record_data.price * record_data.amount, 2)
         vat_price = round(0.01 * record_data.vat * total_wo_vat, 2)
         total = round(total_wo_vat + vat_price, 2)
-        return render_template("remove_record.html", r = record_data, total_wo_vat = total_wo_vat, vat_price = vat_price, total = total)
+        return render_template("remove_record.html", r = record_data, total_wo_vat = total_wo_vat,
+                               vat_price = vat_price, total = total)
     if request.method == "POST":
-        records.remove_record_data(id, record_data.record_type)
+        records.remove_record_data(record_id, record_data.record_type)
         return redirect("/records")
     
