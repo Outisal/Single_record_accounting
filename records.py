@@ -153,8 +153,7 @@ def add_record(record):
                                       "amount":record.amount, "price":record.price})
     record_id = result.fetchone()[0]
     db.session.commit()
-    if record.record_type == 2:
-        return record_id
+    return record_id
 
 def add_invoice(invoice):
     sql = text("""INSERT INTO invoice (record_id, customer, payment_term,
