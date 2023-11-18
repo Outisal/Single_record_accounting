@@ -43,6 +43,21 @@ nav a{
   line-height: 1;
 }
 
+nav_record a{
+  text-decoration: none;
+  font-size: 14px;
+  font-weight:400;
+  color: #000;
+  background:var(--white);
+  padding: .2em 1em;
+  border-radius: .5em;
+  border-style: solid;
+  border-color:var(--primary-clr);
+  border-width: 0.1em;
+  line-height: 1;
+  align-items: center;
+}
+
 .navigation_logout {
   float: right;
   display: flex;
