@@ -154,7 +154,7 @@ def add_income():
         invoice_data.iban = request.form["iban"]
         invoice_data.email = request.form["email"]
         invoice_data.mobile_nr = request.form["mobile_nr"]
-        invoice_data.post_address =request.form["post_address"]
+        invoice_data.post_address = request.form["post_address"]
         if len(income.title) > 100:
             return render_template("error.html", message="Title is too long")
         if float(income.amount) > 1000:
@@ -197,6 +197,7 @@ def update_income(record_id):
         income.amount = request.form["amount"]
         income.price = request.form["price"]
         income.title = request.form["title"]
+        invoice_data. record_id = record_id
         invoice_data.payment_term = request.form["payment_term"]
         invoice_data.customer = request.form["customer"]
         invoice_data.iban = request.form["iban"]
