@@ -1,7 +1,6 @@
 from datetime import timedelta
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, session, abort
 from app import app
-from flask import session, abort
 import users
 import records
 
@@ -75,7 +74,7 @@ def favorites():
         new_favorites.post_address =request.form.get("post_address")
         if len(new_favorites.iban) > 34:
             return render_template("error.html", message="IBAN is too long")
-        if payment_term != None:
+        if payment_term:
             if float(new_favorites.payment_term) > 300:
                 return render_template("error.html",
                                        message="Payment term should be less than 300 days")
@@ -255,7 +254,7 @@ def remove_record(record_id):
         check_csrf(request.form["csrf_token"])
         records.remove_record_data(record_id, record_data.record_type)
         return redirect("/records")
-    
+
 def check_csrf(csrf_token):
     if session["csrf_token"] != csrf_token:
         abort(403)

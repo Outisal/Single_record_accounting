@@ -1,6 +1,6 @@
+import secrets
 from sqlalchemy.sql import text
 from flask import session
-import secrets
 from werkzeug.security import check_password_hash, generate_password_hash
 from db import db
 
@@ -133,4 +133,3 @@ def update_favorites(favorites):
 
 def get_logged_in_user_id():
     return session.get("user_id",0)
-
