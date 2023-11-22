@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="/static/styles.css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<form action="/register" method="POST">
+<form action="/register" method="POST" onsubmit="return check(this)">
 <div class="frame">
   <img src="/static/logo.jpg" alt="logo">
   <div class="info"><h2>Register</h2></div>
@@ -10,8 +10,8 @@
     <div class=row><label>Username:</label><input type="text" name="username" required></div>
     <div class=row><label>Password:</label><input type="password" name="password1" required></div>
     <div class=row><label>Repeat password:</label><input type="password" name="password2" required></div>
-    <div class=row><label>Business name:</label><input type="business_name" name="business_name" required></div>
-    <div class=row><label>Business id:</label><input type="business_id" name="business_id" required></div>
+    <div class=row><label>Business name:</label><input type="text" name="business_name" required></div>
+    <div class=row><label>Business id:</label><input type="text" name="business_id" required></div>
   </div>
   <div class="footer">
     <input type="submit" value="Register">
@@ -19,3 +19,17 @@
   </div>
 </div>
 </form>
+
+<script>
+  function check(form) {
+      if (form.business_id.value.length > 100) {
+          alert("Business id is too long");
+          return false;
+      }
+      if (form.business_name.value.length > 100) {
+          alert("Business nameis too long");
+          return false;
+      }
+      return true;
+  }
+  </script>

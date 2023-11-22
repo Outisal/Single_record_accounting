@@ -34,6 +34,10 @@ def register():
         password2 = request.form["password2"]
         business_name = request.form["business_name"]
         business_id = request.form["business_id"]
+        if len(business_name) > 100:
+            return render_template("error.html", message="Business name is too long")
+        if len(business_id) > 100:
+            return render_template("error.html", message="Business id is too long")
         if password1 != password2:
             return render_template("error.html", message="passwords don't match")
         if users.register(username, password1, business_name, business_id):
