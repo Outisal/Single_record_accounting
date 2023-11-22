@@ -1,5 +1,6 @@
 from sqlalchemy.sql import text
 from flask import session
+import secrets
 from werkzeug.security import check_password_hash, generate_password_hash
 from db import db
 
@@ -65,11 +66,14 @@ def login(username, password):
     if check_password_hash(user.password, password):
         session["username"] = username
         session["user_id"] = user.id
+        session["csrf_token"] = secrets.token_hex(16)
         return True
     return False
 
 def logout():
     del session["username"]
+    del session["user_id"]
+    del session["csrf_token"]
 
 def register(username, password, business_name, business_id):
     hash_value = generate_password_hash(password)
@@ -129,3 +133,4 @@ def update_favorites(favorites):
 
 def get_logged_in_user_id():
     return session.get("user_id",0)
+

@@ -1,6 +1,7 @@
 from datetime import timedelta
 from flask import render_template, request, redirect
 from app import app
+from flask import session, abort
 import users
 import records
 
@@ -46,6 +47,7 @@ def maintain_account():
         account_data = users.get_account_data()
         return render_template("update_account_data.html", a = account_data)
     if request.method == "POST":
+        check_csrf(request.form["csrf_token"])
         user_id = request.form["user_id"]
         business_name = request.form["business_name"]
         business_id = request.form["business_id"]
@@ -62,6 +64,7 @@ def favorites():
         favorites_now = users.get_favorites()
         return render_template("update_favorites.html", f = favorites_now)
     if request.method == "POST":
+        check_csrf(request.form["csrf_token"])
         new_favorites = users.Favorites
         new_favorites.user_id = request.form["user_id"]
         new_favorites.iban = request.form["iban"]
@@ -90,6 +93,7 @@ def add_expense():
         classes = records.get_record_classes(1)
         return render_template("add_expense.html", classes = classes)
     if request.method == "POST":
+        check_csrf(request.form["csrf_token"])
         expense = records.Record()
         expense.user_id = request.form["user_id"]
         expense.record_date = request.form["record_date"]
@@ -111,6 +115,7 @@ def update_expense(record_id):
         classes = records.get_record_classes(1)
         return render_template("update_expense.html", classes = classes, r = record_data)
     if request.method == "POST":
+        check_csrf(request.form["csrf_token"])
         expense = records.Record()
         expense.record_id = record_id
         expense.record_date = request.form["record_date"]
@@ -134,6 +139,7 @@ def add_income():
             return render_template("add_income.html", classes = classes, f = favorites_now)
         return render_template("add_income.html", classes = classes)
     if request.method == "POST":
+        check_csrf(request.form["csrf_token"])
         income = records.Record()
         invoice_data = records.Invoice()
         income.user_id = request.form["user_id"]
@@ -181,6 +187,7 @@ def update_income(record_id):
         return render_template("update_income.html", classes = classes,
                                i = invoice_data_now, r = record_data)
     if request.method == "POST":
+        check_csrf(request.form["csrf_token"])
         income = records.Record()
         invoice_data = records.Invoice()
         income.record_id = record_id
@@ -243,6 +250,11 @@ def remove_record(record_id):
         return render_template("remove_record.html", r = record_data, total_wo_vat = total_wo_vat,
                                vat_price = vat_price, total = total)
     if request.method == "POST":
+        check_csrf(request.form["csrf_token"])
         records.remove_record_data(record_id, record_data.record_type)
         return redirect("/records")
+    
+def check_csrf(csrf_token):
+    if session["csrf_token"] != csrf_token:
+        abort(403)
     

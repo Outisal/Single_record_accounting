@@ -51,5 +51,6 @@
     <input type="submit" value="Remove record">
     <button type="button" onclick="window.location.href='/records'">Cancel</button>
   </div>
-</div>       
+</div>
+<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">      
 </form>
