@@ -36,4 +36,4 @@ INSERT INTO record_class (record_type, record_class, vat)
                     (2, '319 Dividends received', 0),
                     (2, '320 Taxable portion of dividends', 0),
                     (2, '323 interest income and other financial income', 0),
-                    (2, '324 Other taxable income', 0)
+                    (2, '324 Other taxable income', 0);

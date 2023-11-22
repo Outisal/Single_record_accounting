@@ -14,7 +14,11 @@ The features are:
 
 Several elements of the invoice design were inspired by the styling found at https://github.com/codingmarket07/Simple-Invoice-UI-Design-Template
 
-### To test the app, please do the following:
+### Production address
+
+You can access the app: https://single-record-accounting.fly.dev/
+
+### Running the app locally
 
 Clone this repository to your computer and navigate to its root folder. Create file ".env" in the directory and define its content as follows:
 ```
