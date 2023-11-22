@@ -11,17 +11,17 @@
   <div>
     <p class="p_home">Note that updates will change your history records. 
         If you are starting a new business, please create a new user account instead.</p> 
-    <div class=row><label>Business name:</label><input type="text" name="business_name" value={{a.business_name}} required></div>
-    <div class=row><label>Business id:</label><input type="text" name="business_id" value={{a.business_id}} required></div>
+    <div class=row><label>Business name:</label><input type="text" name="business_name" value="{{ a.business_name }}" required></div>
+    <div class=row><label>Business id:</label><input type="text" name="business_id" value="{{ a.business_id }}" required></div>
   </div>
   <div class="footer">
     <input type="submit" value="Save account data">
     <button type="button" onclick="window.location.href='/'">Cancel</button>
     <input type="hidden" name="user_id" value="{{ session.user_id }}">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    </form>
   </div>
 </div>
+</form>
 
 <script>
     function check(form) {
@@ -30,7 +30,7 @@
             return false;
         }
         if (form.business_name.value.length > 100) {
-            alert("Business nameis too long");
+            alert("Business name is too long");
             return false;
         }
         return true;

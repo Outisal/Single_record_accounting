@@ -10,21 +10,21 @@
   </div>
   <div>
     <div class=row><label><h3>Payment data:</h3></label></div>
-    <div class=row><label>IBAN:</label><input type="text" name="iban" value="{{f.iban}}"></div>
-    <div class=row><label>Payment term (days):</label><input type="number" name="payment_term" value="{{f.payment_term}}"></div>
+    <div class=row><label>IBAN:</label><input type="text" name="iban" value="{{ f.iban }}"></div>
+    <div class=row><label>Payment term (days):</label><input type="number" name="payment_term" value="{{ f.payment_term }}"></div>
     <div class=row><label><h3>Contact information:</h3></label></div>
     <div class=row><label>email:</label><input type="text" name="email" value="{{f.email}}"></div>
-    <div class=row><label>mobile number:</label><input type="text" name="mobile_nr" value="{{f.mobile_nr}}"></div>
-    <div class=row><label>post address:</label><input type="text" name="post_address" value="{{f.post_address}}"></div>
+    <div class=row><label>mobile number:</label><input type="text" name="mobile_nr" value="{{ f.mobile_nr }}"></div>
+    <div class=row><label>post address:</label><input type="text" name="post_address" value="{{ f.post_address }}"></div>
   </div>
   <div class="footer">
     <input type="submit" value="Save favorites">
     <button type="button" onclick="window.location.href='/'">Cancel</button>
     <input type="hidden" name="user_id" value="{{ session.user_id }}">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    </form>
   </div>
 </div>
+</form>
 
 <script>
     function check(form) {

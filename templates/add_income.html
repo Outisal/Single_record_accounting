@@ -22,20 +22,20 @@
     <div class=row><label>Amount (h):</label><input type="number" name="amount" step=0.05 required></div>
     <div class=row><label>Price (€/h):</label><input type="number" name="price" step=0.01 required></div>
     <h3>The following is prefilled based on your favorites. Change if needed.</h3>
-    <div class=row><label>IBAN:</label><input type="text" name="iban" value="{{f.iban}}" required></div>
+    <div class=row><label>IBAN:</label><input type="text" name="iban" value="{{ f.iban }}" required></div>
     <div class=row><label>Payment term (days):</label><input type="number" name="payment_term" value={{f.payment_term}} required></div>
-    <div class=row><label>email:</label><input type="text" name="email" value="{{f.email}}" required></div>
-    <div class=row><label>mobile number:</label><input type="text" name="mobile_nr" value="{{f.mobile_nr}}" required></div>
-    <div class=row><label>post address:</label><input type="text" name="post_address" value="{{f.post_address}}" required></div>
+    <div class=row><label>email:</label><input type="text" name="email" value="{{ f.email }}" required></div>
+    <div class=row><label>mobile number:</label><input type="text" name="mobile_nr" value="{{ f.mobile_nr }}" required></div>
+    <div class=row><label>post address:</label><input type="text" name="post_address" value="{{ f.post_address }}" required></div>
   </div>
   <div class="footer">
     <input type="submit" value="Save income">
     <button type="button" onclick="window.location.href='/'">Cancel</button>
     <input type="hidden" name="user_id" value="{{ session.user_id }}">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    </form>
   </div>
 </div>
+</form>
 
 <script>
     function check(form) {
