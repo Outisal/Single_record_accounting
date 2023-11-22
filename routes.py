@@ -67,17 +67,18 @@ def favorites():
         check_csrf(request.form["csrf_token"])
         new_favorites = users.Favorites
         new_favorites.user_id = request.form["user_id"]
-        new_favorites.iban = request.form["iban"]
+        new_favorites.iban = request.form.get("iban")
         payment_term = request.form["payment_term"] if request.form["payment_term"] else None
         new_favorites.payment_term = payment_term
-        new_favorites.email = request.form["email"]
-        new_favorites.mobile_nr = request.form["mobile_nr"]
-        new_favorites.post_address =request.form["post_address"]
+        new_favorites.email = request.form.get("email")
+        new_favorites.mobile_nr = request.form.get("mobile_nr")
+        new_favorites.post_address =request.form.get("post_address")
         if len(new_favorites.iban) > 34:
             return render_template("error.html", message="IBAN is too long")
-        if float(new_favorites.payment_term) > 300:
-            return render_template("error.html",
-                                   message="Payment term should be less than 300 days")
+        if payment_term != None:
+            if float(new_favorites.payment_term) > 300:
+                return render_template("error.html",
+                                       message="Payment term should be less than 300 days")
         if len(new_favorites.email) > 320:
             return render_template("error.html", message="Email is too long")
         if len(new_favorites.mobile_nr) > 15:
