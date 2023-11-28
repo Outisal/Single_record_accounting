@@ -24,15 +24,34 @@
 </form>
 
 <script>
-    function check(form) {
-        if (form.business_id.value.length > 100) {
-            alert("Business id is too long");
-            return false;
-        }
-        if (form.business_name.value.length > 100) {
-            alert("Business name is too long");
-            return false;
-        }
-        return true;
+  function check(form) {
+
+    var businessIdPattern = /^\d{7}-\d$/;
+
+    if (form.business_id.value.length != 9 || !businessIdPattern.test(form.business_id.value)) {
+        alert("Business id should consist of 7 digits, a hyphen (-), and a check digit.");
+        return false;
+     }
+
+    var factor = [7, 9, 10, 5, 8, 4, 2];
+    var checkSum = 0;
+
+    // Calculate the check sum using factors
+    for (var i = 0; i < 7; i++) {
+      checkSum += parseInt(form.business_id.value[i]) * factor[i];
     }
-    </script>
+
+    var checkReminder = checkSum % 11;
+    var checkDigit = (checkReminder === 0) ? 0 : (checkReminder === 1) ? -1 : 11 - checkReminder;
+
+    if (parseInt(form.business_id.value[8]) !== checkDigit) {
+        alert("Business id is not valid. Business id should consist of 7 digits, a hyphen (-), and a check digit.");
+        return false;
+    }
+    if (form.business_name.value.length > 100) {
+        alert("Business name is too long");
+        return false;
+    }
+    return true;
+  }
+</script>

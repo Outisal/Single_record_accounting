@@ -34,12 +34,17 @@ def register():
         password2 = request.form["password2"]
         business_name = request.form["business_name"]
         business_id = request.form["business_id"]
+        if len(username) > 100:
+            return render_template("error.html", message="Username is too long")
         if len(business_name) > 100:
             return render_template("error.html", message="Business name is too long")
-        if len(business_id) > 100:
-            return render_template("error.html", message="Business id is too long")
+        if not check_business_id(business_id):
+            return render_template("error.html", message="""Business id is in wrong format. 
+                                   Business id should consist of 7 digits, a hyphen ("-"), and a check digit.""")           
         if password1 != password2:
             return render_template("error.html", message="passwords don't match")
+        if len(password1) > 100:
+            return render_template("error.html", message="Business id is too long")           
         if users.register(username, password1, business_name, business_id):
             return redirect("/")
         return render_template("error.html", message="Registeration failed.")
@@ -55,9 +60,10 @@ def maintain_account():
         business_name = request.form["business_name"]
         business_id = request.form["business_id"]
         if len(business_name) > 100:
-            return render_template("error.html", message="Business name is too long")
-        if len(business_id) > 100:
-            return render_template("error.html", message="Business id is too long")
+            return render_template("error.html", message="Business name is too long.")
+        if not check_business_id(business_id):
+            return render_template("error.html", message="""Business id is in wrong format. 
+                                   Business id should consist of 7 digits, a hyphen ("-"), and a check digit.""")  
         users.update_account_data(user_id, business_name, business_id)
         return redirect("/")
 
@@ -262,4 +268,29 @@ def remove_record(record_id):
 def check_csrf(csrf_token):
     if session["csrf_token"] != csrf_token:
         abort(403)
+
+def check_business_id(business_id):
+    #check the format of the business_id
+    if len(business_id) > 9:
+        return False
+    if not business_id[:7].isdigit():
+        return False
+    if not business_id[8].isdigit():
+        return False
+    if business_id[7] != "-":
+        return False
     
+    factor = [7, 9, 10, 5, 8, 4, 2] # define the factors for business id check digit calculation
+    check_sum = 0
+    for i in range(7):
+        check_sum += int(business_id[i]) * factor[i]
+    check_reminder = check_sum % 11
+    if check_reminder == 1: #if reminder is 1, business id is not valid
+        return False
+    if check_reminder == 0 and int(business_id[8]) != 0: #if reminder is 0, check digit is 0
+        return False
+    if 2 <= check_reminder <= 10: #if reminder is between 2-10, check digit is 11 - reminder
+        check_digit = 11 - check_reminder
+        if int(business_id[8]) != check_digit:
+            return False
+    return True
