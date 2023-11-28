@@ -14,6 +14,10 @@ The features are:
 
 Several elements of the invoice design were inspired by the styling found at https://github.com/codingmarket07/Simple-Invoice-UI-Design-Template
 
+### Testing instructions
+
+To register successfully on the app and maintain favorites, as well as add or edit income, ensure that you use a valid business ID and IBAN number in the correct format. You can generate valid business IDs and IBAN numbers using the following generator tool:  https://telepartikkeli.azurewebsites.net/tunnusgeneraattori
+
 ### Production address
 
 You can access the app: https://single-record-accounting.fly.dev/

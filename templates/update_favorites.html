@@ -3,51 +3,74 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <form action="/update_favorites" method="POST" onsubmit="return check(this)">
-<div class="frame">
-  <img src="/static/logo.jpg" alt="logo">
-  <div class="info">
-    <h2>Maintain Favorites for {{ session.username }}</h2>
+  <div class="frame">
+    <img src="/static/logo.jpg" alt="logo">
+    <div class="info">
+      <h2>Maintain Favorites for {{ session.username }}</h2>
+    </div>
+    <div>
+      <div class=row><label>
+          <h3>Payment data:</h3>
+        </label></div>
+      <div class=row><label>IBAN:</label><input type="text" name="iban" value="{{ f.iban }}"></div>
+      <div class=row><label>Payment term (days):</label><input type="number" name="payment_term"
+          value="{{ f.payment_term }}"></div>
+      <div class=row><label>
+          <h3>Contact information:</h3>
+        </label></div>
+      <div class=row><label>email:</label><input type="text" name="email" value="{{f.email}}"></div>
+      <div class=row><label>mobile number:</label><input type="text" name="mobile_nr" value="{{ f.mobile_nr }}"></div>
+      <div class=row><label>post address:</label><input type="text" name="post_address" value="{{ f.post_address }}">
+      </div>
+    </div>
+    <div class="footer">
+      <input type="submit" value="Save favorites">
+      <button type="button" onclick="window.location.href='/'">Cancel</button>
+      <input type="hidden" name="user_id" value="{{ session.user_id }}">
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    </div>
   </div>
-  <div>
-    <div class=row><label><h3>Payment data:</h3></label></div>
-    <div class=row><label>IBAN:</label><input type="text" name="iban" value="{{ f.iban }}"></div>
-    <div class=row><label>Payment term (days):</label><input type="number" name="payment_term" value="{{ f.payment_term }}"></div>
-    <div class=row><label><h3>Contact information:</h3></label></div>
-    <div class=row><label>email:</label><input type="text" name="email" value="{{f.email}}"></div>
-    <div class=row><label>mobile number:</label><input type="text" name="mobile_nr" value="{{ f.mobile_nr }}"></div>
-    <div class=row><label>post address:</label><input type="text" name="post_address" value="{{ f.post_address }}"></div>
-  </div>
-  <div class="footer">
-    <input type="submit" value="Save favorites">
-    <button type="button" onclick="window.location.href='/'">Cancel</button>
-    <input type="hidden" name="user_id" value="{{ session.user_id }}">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-  </div>
-</div>
 </form>
 
 <script>
-    function check(form) {
-        if (form.iban.value.length > 34) {
-            alert("IBAN is too long");
-            return false;
-        }
-        if (parseFloat(form.payment_term.value) > 300) {
-            alert("Payment term should be less than 300 days");
-            return false;
-        }
-        if (form.email.value.length > 320) {
-            alert("Email is too long");
-            return false;
-        }
-        if (form.mobile_nr.value.length > 15) {
-            alert("Mobile number is too long");
-            return false;
-        }
-        if (form.post_address.value.length > 100) {
-            alert("Post address is too long");
-            return false;
-        }
-        return true;
+  function check(form) {
+    var iban = form.iban.value.replace(/\s/g, '');
+    var ibanPattern = /^[A-Z]{2}\d{16}$/;
+
+    if (iban.length !== 18 || !ibanPattern.test(iban)) {
+      alert("Iban number is invalid.");
+      return false;
     }
-    </script>
+
+    var countryCode = iban.substring(0, 2);
+    var countryCodeNr = '';
+
+    for (var i = 0; i < countryCode.length; i++) {
+      countryCodeNr += (countryCode.charCodeAt(i) - 55).toString();
+    }
+
+    var checkNumber = BigInt(iban.substring(4) + countryCodeNr + iban.substring(2, 4)) % BigInt(97);
+    if (checkNumber !== 1n) {
+      alert("IBAN number is invalid.");
+      return false;
+    }
+
+    if (parseFloat(form.payment_term.value) > 300) {
+      alert("Payment term should be less than 300 days");
+      return false;
+    }
+    if (form.email.value.length > 320) {
+      alert("Email is too long");
+      return false;
+    }
+    if (form.mobile_nr.value.length > 15) {
+      alert("Mobile number is too long");
+      return false;
+    }
+    if (form.post_address.value.length > 100) {
+      alert("Post address is too long");
+      return false;
+    }
+    return true;
+  }
+</script>

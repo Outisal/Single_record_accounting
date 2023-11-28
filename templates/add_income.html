@@ -4,41 +4,66 @@
 
 <form action="/add_income" method="POST" onsubmit="return check(this)">
 
-<div class="frame">
-  <img src="/static/logo.jpg" alt="logo">
-  <div class="info">
-    <h2>Add income:</h2>
-  </div>
-  <div>
-    <div class=row><label>Date:</label><input type="date" name="record_date" required></div>
-    <div class=row><label>Title:</label><input type="text" name="title" required></div>
-    <div class=row><label for="record_class">Class:</label>
-    <select type="record_class" name="record_class" required>
-        {% for record_class in classes %}
-            <option value="{{ record_class[0] }}">{{ record_class[1] }}</option>
-            {% endfor %}
-    </select></div>
-    <div class=row><label>Customer:</label><input type="text" name="customer" required></div>
-    <div class=row><label>Amount (h):</label><input type="number" name="amount" step=0.05 required></div>
-    <div class=row><label>Price (€/h):</label><input type="number" name="price" step=0.01 required></div>
-    <h3>The following is prefilled based on your favorites. Change if needed.</h3>
-    <div class=row><label>IBAN:</label><input type="text" name="iban" value="{{ f.iban }}" required></div>
-    <div class=row><label>Payment term (days):</label><input type="number" name="payment_term" value={{f.payment_term}} required></div>
-    <div class=row><label>email:</label><input type="text" name="email" value="{{ f.email }}" required></div>
-    <div class=row><label>mobile number:</label><input type="text" name="mobile_nr" value="{{ f.mobile_nr }}" required></div>
-    <div class=row><label>post address:</label><input type="text" name="post_address" value="{{ f.post_address }}" required></div>
-  </div>
-  <div class="footer">
-    <input type="submit" value="Save income">
-    <button type="button" onclick="window.location.href='/'">Cancel</button>
-    <input type="hidden" name="user_id" value="{{ session.user_id }}">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-  </div>
-</div>
+    <div class="frame">
+        <img src="/static/logo.jpg" alt="logo">
+        <div class="info">
+            <h2>Add income:</h2>
+        </div>
+        <div>
+            <div class=row><label>Date:</label><input type="date" name="record_date" required></div>
+            <div class=row><label>Title:</label><input type="text" name="title" required></div>
+            <div class=row><label for="record_class">Class:</label>
+                <select type="record_class" name="record_class" required>
+                    {% for record_class in classes %}
+                    <option value="{{ record_class[0] }}">{{ record_class[1] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class=row><label>Customer:</label><input type="text" name="customer" required></div>
+            <div class=row><label>Amount (h):</label><input type="number" name="amount" step=0.05 required></div>
+            <div class=row><label>Price (€/h):</label><input type="number" name="price" step=0.01 required></div>
+            <h3>The following is prefilled based on your favorites. Change if needed.</h3>
+            <div class=row><label>IBAN:</label><input type="text" name="iban" value="{{ f.iban }}" required></div>
+            <div class=row><label>Payment term (days):</label><input type="number" name="payment_term"
+                    value={{f.payment_term}} required></div>
+            <div class=row><label>email:</label><input type="text" name="email" value="{{ f.email }}" required></div>
+            <div class=row><label>mobile number:</label><input type="text" name="mobile_nr" value="{{ f.mobile_nr }}"
+                    required></div>
+            <div class=row><label>post address:</label><input type="text" name="post_address"
+                    value="{{ f.post_address }}" required></div>
+        </div>
+        <div class="footer">
+            <input type="submit" value="Save income">
+            <button type="button" onclick="window.location.href='/'">Cancel</button>
+            <input type="hidden" name="user_id" value="{{ session.user_id }}">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        </div>
+    </div>
 </form>
 
 <script>
     function check(form) {
+        var iban = form.iban.value.replace(/\s/g, '');
+        var ibanPattern = /^[A-Z]{2}\d{16}$/;
+
+        if (iban.length !== 18 || !ibanPattern.test(iban)) {
+            alert("Iban number is invalid.");
+            return false;
+        }
+
+        var countryCode = iban.substring(0, 2);
+        var countryCodeNr = '';
+
+        for (var i = 0; i < countryCode.length; i++) {
+            countryCodeNr += (countryCode.charCodeAt(i) - 55).toString();
+        }
+
+        var checkNumber = BigInt(iban.substring(4) + countryCodeNr + iban.substring(2, 4)) % BigInt(97);
+        if (checkNumber !== 1n) {
+            alert("IBAN number is invalid.");
+            return false;
+        }
+
         if (form.title.value.length > 100) {
             alert("Title is too long");
             return false;
@@ -53,10 +78,6 @@
         }
         if (parseFloat(form.price.value) > 200000) {
             alert("Price is too high");
-            return false;
-        }
-        if (form.iban.value.length > 34) {
-            alert("IBAN is too long");
             return false;
         }
         if (parseFloat(form.payment_term.value) > 300) {
@@ -77,4 +98,4 @@
         }
         return true;
     }
-    </script>
+</script>

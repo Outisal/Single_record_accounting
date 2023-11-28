@@ -82,8 +82,8 @@ def favorites():
         new_favorites.email = request.form.get("email")
         new_favorites.mobile_nr = request.form.get("mobile_nr")
         new_favorites.post_address =request.form.get("post_address")
-        if len(new_favorites.iban) > 34:
-            return render_template("error.html", message="IBAN is too long")
+        if not check_iban(new_favorites.iban):
+            return render_template("error.html", message="IBAN is invalid")
         if payment_term:
             if float(new_favorites.payment_term) > 300:
                 return render_template("error.html",
@@ -170,8 +170,8 @@ def add_income():
             return render_template("error.html", message="Amount is too high")
         if float(income.price) > 200000:
             return render_template("error.html", message="Price is too high")
-        if len(invoice_data.iban) > 34:
-            return render_template("error.html", message="IBAN is too long")
+        if not check_iban(invoice_data.iban):
+            return render_template("error.html", message="IBAN is invalid")
         if float(invoice_data.payment_term) > 300:
             return render_template("error.html",
                                    message="Payment term should be less than 300 days")
@@ -219,8 +219,8 @@ def update_income(record_id):
             return render_template("error.html", message="Amount is too high")
         if float(income.price) > 200000:
             return render_template("error.html", message="Price is too high")
-        if len(invoice_data.iban) > 34:
-            return render_template("error.html", message="IBAN is too long")
+        if not check_iban(invoice_data.iban):
+            return render_template("error.html", message="IBAN is invalid")
         if float(invoice_data.payment_term) > 300:
             return render_template("error.html",
                                    message="Payment term should be less than 300 days")
@@ -286,11 +286,36 @@ def check_business_id(business_id):
         check_sum += int(business_id[i]) * factor[i]
     check_reminder = check_sum % 11
     if check_reminder == 1: #if reminder is 1, business id is not valid
-        return False
+        check_digit = -1
     if check_reminder == 0 and int(business_id[8]) != 0: #if reminder is 0, check digit is 0
-        return False
+        check_digit = 0
     if 2 <= check_reminder <= 10: #if reminder is between 2-10, check digit is 11 - reminder
         check_digit = 11 - check_reminder
-        if int(business_id[8]) != check_digit:
-            return False
+    if int(business_id[8]) != check_digit:
+        return False
+    return True
+
+def check_iban(iban):
+    iban = "".join(iban.split())
+
+    #check the format of the iban number
+    if len(iban) != 18:
+        return False
+
+    #check the format of the country code
+    country_code = iban[:2]
+    if not country_code.isalpha() or not country_code.isupper():
+        return False
+    
+    if not iban[2:].isdigit():
+        return False
+
+    #calculate if iban number is valid
+    country_code_nr = ""
+    for char in country_code:
+        country_code_nr += str(ord(char) - 55)
+
+    check_number = int(iban[4:] + country_code_nr + iban[2:4]) % 97
+    if check_number != 1:
+        return False
     return True
