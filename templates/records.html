@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <link rel="stylesheet" href="/static/styles.css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <div class="frame_records">
   <img src="/static/logo.jpg" alt="logo">
   <div class="info">
@@ -9,7 +10,8 @@
     <button type="button" onclick="window.location.href='/add_income'">Add income</button>
   </div>
   <div>
-    <table> 
+    <input id="RecordInput" onkeyup="searchTable()" type="text" placeholder="Type here to filter records">
+    <table id="RecordTable"> 
       <thead> 
         <tr> 
         <th>Date</th> 
@@ -55,3 +57,27 @@
     </table> 
   </div>
 </div>
+
+<script>
+  function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("RecordInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("RecordTable");
+      tr = table.getElementsByTagName("tr");
+      for (i = 1; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td");
+          for (j = 0; j < td.length; j++) {
+              if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                  found = true;
+              }
+          }
+          if (found) {
+              tr[i].style.display = ""; //show row
+              found = false;
+          } else {
+              tr[i].style.display = "none"; //hide row
+          }
+      }
+  }
+  </script>
