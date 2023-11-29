@@ -39,12 +39,13 @@ def register():
         if len(business_name) > 100:
             return render_template("error.html", message="Business name is too long")
         if not check_business_id(business_id):
-            return render_template("error.html", message="""Business id is in wrong format. 
-                                   Business id should consist of 7 digits, a hyphen ("-"), and a check digit.""")           
+            return render_template("error.html", message="""Business id is in wrong format.
+                                   Business id should consist of 7 digits,
+                                   a hyphen ("-"), and a check digit.""")
         if password1 != password2:
             return render_template("error.html", message="passwords don't match")
         if len(password1) > 100:
-            return render_template("error.html", message="Business id is too long")           
+            return render_template("error.html", message="Business id is too long")
         if users.register(username, password1, business_name, business_id):
             return redirect("/")
         return render_template("error.html", message="Registeration failed.")
@@ -62,8 +63,9 @@ def maintain_account():
         if len(business_name) > 100:
             return render_template("error.html", message="Business name is too long.")
         if not check_business_id(business_id):
-            return render_template("error.html", message="""Business id is in wrong format. 
-                                   Business id should consist of 7 digits, a hyphen ("-"), and a check digit.""")  
+            return render_template("error.html", message="""Business id is in wrong format.
+                                   Business id should consist of 7 digits,
+                                   a hyphen ("-"), and a check digit.""")
         users.update_account_data(user_id, business_name, business_id)
         return redirect("/")
 
@@ -279,7 +281,7 @@ def check_business_id(business_id):
         return False
     if business_id[7] != "-":
         return False
-    
+
     factor = [7, 9, 10, 5, 8, 4, 2] # define the factors for business id check digit calculation
     check_sum = 0
     for i in range(7):
@@ -306,7 +308,7 @@ def check_iban(iban):
     country_code = iban[:2]
     if not country_code.isalpha() or not country_code.isupper():
         return False
-    
+
     if not iban[2:].isdigit():
         return False
 
