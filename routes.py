@@ -1,8 +1,11 @@
 from datetime import timedelta
-from flask import render_template, request, redirect, session, abort
+from flask import render_template, request, redirect, session, abort, make_response
+from pdfkit import from_string, configuration
 from app import app
 import users
 import records
+
+config = configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
 
 @app.route("/")
 def index():
@@ -248,8 +251,18 @@ def invoice(invoice_id):
     total_wo_vat = round(i_data.price * i_data.amount, 2)
     vat_price = round(0.01 * i_data.vat * total_wo_vat, 2)
     total = vat_price + total_wo_vat
-    return render_template("invoice.html", i = i_data, due_date = due_date, vat_price = vat_price,
-                           total = total, total_wo_vat = total_wo_vat)
+    css = "/static/styles.css"
+    rendered = render_template("invoice.html", i = i_data, due_date = due_date, vat_price = vat_price,
+                        total = total, total_wo_vat = total_wo_vat)
+    
+    css = "static/styles.css"
+    pdf = from_string(rendered, False, options={'enable-local-file-access': None}, configuration=config, css=css)
+
+    response = make_response(pdf)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = f'inline; filename=invoice_{invoice_id}.pdf'
+
+    return response
 
 @app.route("/remove_record/<int:record_id>", methods=["GET","POST"])
 def remove_record(record_id):
