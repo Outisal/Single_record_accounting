@@ -186,9 +186,9 @@ def record_type_and_class(record_id):
 
 def get_invoice_id(record_id):
     sql = text("""SELECT I.id FROM invoice I
-               LEFT JOIN records R ON R.id = I.record_id 
-               WHERE R.id=record_id""")
-    invoice_id = db.session.execute(sql,{"record_id":record_id}).fetchone()
+               LEFT JOIN records R ON I.record_id = R.id
+               WHERE I.record_id=:record_id""")
+    invoice_id = db.session.execute(sql, {"record_id":record_id}).fetchone()
     return invoice_id[0]
 
 def get_invoice_data(invoice_id):
@@ -198,14 +198,14 @@ def get_invoice_data(invoice_id):
                U.business_name business_name, U.business_id business_id, R.record_class record_class
                FROM invoice I LEFT JOIN records R ON I.record_id = R.id
                LEFT JOIN users U ON R.user_id = U.id
-               WHERE I.id=:id""")
-    invoice_data = db.session.execute(sql, {"id":invoice_id}).fetchone()
+               WHERE I.id=:invoice_id""")
+    invoice_data = db.session.execute(sql, {"invoice_id":invoice_id}).fetchone()
     return invoice_data
 
 def get_record_data(record_id):
     sql = text("""SELECT id, record_date, title, record_type, record_class, vat, amount, price
-               FROM records WHERE id=:id""")
-    record_data = db.session.execute(sql, {"id":record_id}).fetchone()
+               FROM records WHERE id=:record_id""")
+    record_data = db.session.execute(sql, {"record_id":record_id}).fetchone()
     return record_data
 
 def remove_record_data(record_id, record_type):
