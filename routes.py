@@ -1,8 +1,9 @@
 from datetime import timedelta
-from flask import render_template, request, redirect, session, abort
+from flask import render_template, request, redirect
 from app import app
 import users
 import records
+import validators
 
 @app.route("/")
 def index():
@@ -36,16 +37,16 @@ def register():
         business_id = request.form["business_id"]
         if len(username) > 100:
             return render_template("error.html", message="Username is too long")
-        if len(business_name) > 100:
-            return render_template("error.html", message="Business name is too long")
-        if not check_business_id(business_id):
-            return render_template("error.html", message="""Business id is in wrong format.
-                                   Business id should consist of 7 digits,
-                                   a hyphen ("-"), and a check digit.""")
         if password1 != password2:
             return render_template("error.html", message="passwords don't match")
         if len(password1) > 100:
-            return render_template("error.html", message="Business id is too long")
+            return render_template("error.html", message="Password is too long")
+        if len(business_name) > 100:
+            return render_template("error.html", message="Business name is too long")
+        if not validators.check_business_id(business_id):
+            return render_template("error.html", message="""Business id is in wrong format.
+                                   Business id should consist of 7 digits,
+                                   a hyphen ("-"), and a check digit.""")
         if users.register(username, password1, business_name, business_id):
             return redirect("/")
         return render_template("error.html", message="Registeration failed.")
@@ -56,13 +57,13 @@ def maintain_account():
         account_data = users.get_account_data()
         return render_template("update_account_data.html", a = account_data)
     if request.method == "POST":
-        check_csrf(request.form["csrf_token"])
+        validators.check_csrf(request.form["csrf_token"])
         user_id = request.form["user_id"]
         business_name = request.form["business_name"]
         business_id = request.form["business_id"]
         if len(business_name) > 100:
             return render_template("error.html", message="Business name is too long.")
-        if not check_business_id(business_id):
+        if not validators.check_business_id(business_id):
             return render_template("error.html", message="""Business id is in wrong format.
                                    Business id should consist of 7 digits,
                                    a hyphen ("-"), and a check digit.""")
@@ -75,7 +76,7 @@ def favorites():
         favorites_now = users.get_favorites()
         return render_template("update_favorites.html", f = favorites_now)
     if request.method == "POST":
-        check_csrf(request.form["csrf_token"])
+        validators.check_csrf(request.form["csrf_token"])
         new_favorites = users.Favorites
         new_favorites.user_id = request.form["user_id"]
         new_favorites.iban = request.form.get("iban")
@@ -84,7 +85,7 @@ def favorites():
         new_favorites.email = request.form.get("email")
         new_favorites.mobile_nr = request.form.get("mobile_nr")
         new_favorites.post_address =request.form.get("post_address")
-        if not check_iban(new_favorites.iban):
+        if not validators.check_iban(new_favorites.iban):
             return render_template("error.html", message="IBAN is invalid")
         if payment_term:
             if float(new_favorites.payment_term) > 300:
@@ -105,7 +106,7 @@ def add_expense():
         classes = records.get_record_classes(1)
         return render_template("add_expense.html", classes = classes)
     if request.method == "POST":
-        check_csrf(request.form["csrf_token"])
+        validators.check_csrf(request.form["csrf_token"])
         expense = records.Record()
         expense.user_id = request.form["user_id"]
         expense.record_date = request.form["record_date"]
@@ -127,7 +128,7 @@ def update_expense(record_id):
         classes = records.get_record_classes(1)
         return render_template("update_expense.html", classes = classes, r = record_data)
     if request.method == "POST":
-        check_csrf(request.form["csrf_token"])
+        validators.check_csrf(request.form["csrf_token"])
         expense = records.Record()
         expense.record_id = record_id
         expense.record_date = request.form["record_date"]
@@ -151,7 +152,7 @@ def add_income():
             return render_template("add_income.html", classes = classes, f = favorites_now)
         return render_template("add_income.html", classes = classes)
     if request.method == "POST":
-        check_csrf(request.form["csrf_token"])
+        validators.check_csrf(request.form["csrf_token"])
         income = records.Record()
         invoice_data = records.Invoice()
         income.user_id = request.form["user_id"]
@@ -199,7 +200,7 @@ def update_income(record_id):
         return render_template("update_income.html", classes = classes,
                                i = invoice_data_now, r = record_data)
     if request.method == "POST":
-        check_csrf(request.form["csrf_token"])
+        validators.check_csrf(request.form["csrf_token"])
         income = records.Record()
         invoice_data = records.Invoice()
         income.record_id = record_id
@@ -221,7 +222,7 @@ def update_income(record_id):
             return render_template("error.html", message="Amount is too high")
         if float(income.price) > 200000:
             return render_template("error.html", message="Price is too high")
-        if not check_iban(invoice_data.iban):
+        if not validators.check_iban(invoice_data.iban):
             return render_template("error.html", message="IBAN is invalid")
         if float(invoice_data.payment_term) > 300:
             return render_template("error.html",
@@ -263,61 +264,6 @@ def remove_record(record_id):
         return render_template("remove_record.html", r = record_data, total_wo_vat = total_wo_vat,
                                vat_price = vat_price, total = total)
     if request.method == "POST":
-        check_csrf(request.form["csrf_token"])
+        validators.check_csrf(request.form["csrf_token"])
         records.remove_record_data(record_id, record_data.record_type)
         return redirect("/records")
-
-def check_csrf(csrf_token):
-    if session["csrf_token"] != csrf_token:
-        abort(403)
-
-def check_business_id(business_id):
-    #check the format of the business_id
-    if len(business_id) > 9:
-        return False
-    if not business_id[:7].isdigit():
-        return False
-    if not business_id[8].isdigit():
-        return False
-    if business_id[7] != "-":
-        return False
-
-    factor = [7, 9, 10, 5, 8, 4, 2] # define the factors for business id check digit calculation
-    check_sum = 0
-    for i in range(7):
-        check_sum += int(business_id[i]) * factor[i]
-    check_reminder = check_sum % 11
-    if check_reminder == 1: #if reminder is 1, business id is not valid
-        check_digit = -1
-    if check_reminder == 0 and int(business_id[8]) != 0: #if reminder is 0, check digit is 0
-        check_digit = 0
-    if 2 <= check_reminder <= 10: #if reminder is between 2-10, check digit is 11 - reminder
-        check_digit = 11 - check_reminder
-    if int(business_id[8]) != check_digit:
-        return False
-    return True
-
-def check_iban(iban):
-    iban = "".join(iban.split())
-
-    #check the format of the iban number
-    if len(iban) != 18:
-        return False
-
-    #check the format of the country code
-    country_code = iban[:2]
-    if not country_code.isalpha() or not country_code.isupper():
-        return False
-
-    if not iban[2:].isdigit():
-        return False
-
-    #calculate if iban number is valid
-    country_code_nr = ""
-    for char in country_code:
-        country_code_nr += str(ord(char) - 55)
-
-    check_number = int(iban[4:] + country_code_nr + iban[2:4]) % 97
-    if check_number != 1:
-        return False
-    return True
