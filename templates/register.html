@@ -23,6 +23,26 @@
 <script>
   function check(form) {
 
+    if (form.username.value.length > 100) {
+        alert("Username is too long");
+        return false;
+    }
+    if (form.password1.value.length > 100) {
+        alert("Password is too long");
+        return false;
+    }
+    if (form.password1.value.length < 8) {
+        alert("Password must be at least 8 characters");
+        return false;
+    }
+    if (form.password1.value != form.password2.value) {
+        alert("Passwords don't match");
+        return false;
+    }
+    if (form.business_name.value.length > 100) {
+        alert("Business name is too long");
+        return false;
+    }
     var businessIdPattern = /^\d{7}-\d$/;
 
     if (form.business_id.value.length != 9 || !businessIdPattern.test(form.business_id.value)) {
@@ -43,22 +63,6 @@
 
     if (parseInt(form.business_id.value[8]) !== checkDigit) {
         alert("Business id is not valid. Business id should consist of 7 digits, a hyphen (-), and a check digit.");
-        return false;
-    }
-    if (form.business_name.value.length > 100) {
-        alert("Business name is too long");
-        return false;
-    }
-    if (form.username.value.length > 100) {
-        alert("Username is too long");
-        return false;
-    }
-    if (form.password1.value != form.password2.value) {
-        alert("Passwords don't match");
-        return false;
-    }
-    if (form.password1.value.length > 100) {
-        alert("Password is too long");
         return false;
     }
     return true;

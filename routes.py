@@ -39,10 +39,12 @@ def register():
             return render_template("error.html", message="Username is too long")
         if users.username_used(username):
             return render_template("error.html", message="Username is already taken")
-        if password1 != password2:
-            return render_template("error.html", message="passwords don't match")
         if len(password1) > 100:
             return render_template("error.html", message="Password is too long")
+        if len(password1) < 8:
+            return render_template("error.html", message="Password must be at least 8 characters")
+        if password1 != password2:
+            return render_template("error.html", message="passwords don't match")
         if len(business_name) > 100:
             return render_template("error.html", message="Business name is too long")
         if not validators.check_business_id(business_id):
