@@ -133,3 +133,9 @@ def update_favorites(favorites):
 
 def get_logged_in_user_id():
     return session.get("user_id",0)
+
+def username_used(username):
+    sql = text("SELECT username FROM users WHERE username=:username")
+    result = db.session.execute(sql, {"username":username}).fetchone()
+    return result[0]
+

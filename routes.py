@@ -37,6 +37,8 @@ def register():
         business_id = request.form["business_id"]
         if len(username) > 100:
             return render_template("error.html", message="Username is too long")
+        if users.username_used(username):
+            return render_template("error.html", message="Username is already taken")
         if password1 != password2:
             return render_template("error.html", message="passwords don't match")
         if len(password1) > 100:
