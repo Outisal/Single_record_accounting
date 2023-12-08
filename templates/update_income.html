@@ -88,12 +88,24 @@
             alert("Payment term should be less than 300 days");
             return false;
         }
-        if (form.email.value.length > 320) {
-            alert("Email is too long");
-            return false;
+        var emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,7}\b/;
+
+        if (!emailPattern.test(form.email.value)) {
+        alert("Email address is invalid");
+        return false;
         }
-        if (form.mobile_nr.value.length > 15) {
-            alert("Mobile number is too long");
+
+        var mobile_nr = form.mobile_nr.value.replace(/\s/g, '');
+
+        if (mobile_nr[0] === '+') {
+        mobile_nr = mobile_nr.substring(1);
+        }
+        if (mobile_nr.length < 5 || mobile_nr.length > 12) {
+        alert("Mobile number is invalid.");
+        return false;
+        }
+        if (!/^\d+$/.test(mobile_nr)) {
+        alert("Mobile number is invalid.");
             return false;
         }
         if (form.post_address.value.length > 100) {

@@ -93,10 +93,10 @@ def favorites():
             if float(new_favorites.payment_term) > 300:
                 return render_template("error.html",
                                        message="Payment term should be less than 300 days")
-        if len(new_favorites.email) > 320:
-            return render_template("error.html", message="Email is too long")
-        if len(new_favorites.mobile_nr) > 15:
-            return render_template("error.html", message="Mobile number is too long")
+        if not validators.check_email(new_favorites.email):
+            return render_template("error.html", message="Email address is not valid")
+        if not validators.check_mobile_nr(new_favorites.mobile_nr):
+            return render_template("error.html", message="Mobile number is not valid")
         if len(new_favorites.post_address) > 100:
             return render_template("error.html", message="Post address is too long")
         users.update_favorites(new_favorites)
@@ -175,17 +175,17 @@ def add_income():
             return render_template("error.html", message="Amount is too high")
         if float(income.price) > 200000:
             return render_template("error.html", message="Price is too high")
-        if not check_iban(invoice_data.iban):
+        if not validators.check_iban(invoice_data.iban):
             return render_template("error.html", message="IBAN is invalid")
         if float(invoice_data.payment_term) > 300:
             return render_template("error.html",
                                    message="Payment term should be less than 300 days")
         if len(invoice_data.customer) > 100:
             return render_template("error.html", message="Customer name is too long")
-        if len(invoice_data.email) > 320:
-            return render_template("error.html", message="Email is too long")
-        if len(invoice_data.mobile_nr) > 15:
-            return render_template("error.html", message="Mobile number is too long")
+        if not validators.check_email(invoice_data.email):
+            return render_template("error.html", message="Email address is not valid")
+        if not validators.check_mobile_nr(invoice_data.mobile_nr):
+            return render_template("error.html", message="Mobile number is not valid")
         if len(invoice_data.post_address) > 100:
             return render_template("error.html", message="Post address is too long")
         invoice_data.record_id = records.add_record(income)
@@ -231,10 +231,10 @@ def update_income(record_id):
                                    message="Payment term should be less than 300 days")
         if len(invoice_data.customer) > 100:
             return render_template("error.html", message="Customer name is too long")
-        if len(invoice_data.email) > 320:
-            return render_template("error.html", message="Email is too long")
-        if len(invoice_data.mobile_nr) > 15:
-            return render_template("error.html", message="Mobile number is too long")
+        if not validators.check_email(invoice_data.email):
+            return render_template("error.html", message="Email address is not valid")
+        if not validators.check_mobile_nr(invoice_data.mobile_nr):
+            return render_template("error.html", message="Mobile number is not valid")
         if len(invoice_data.post_address) > 100:
             return render_template("error.html", message="Post address is too long")
         records.update_record_data(income)

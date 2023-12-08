@@ -1,3 +1,4 @@
+import re
 from flask import session, abort
 
 def check_csrf(csrf_token):
@@ -52,5 +53,21 @@ def check_iban(iban):
 
     check_number = int(iban[4:] + country_code_nr + iban[2:4]) % 97
     if check_number != 1:
+        return False
+    return True
+
+def check_email(email):
+    pattern = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b"
+    if re.match(pattern, email):
+        return True
+    return False
+
+def check_mobile_nr(mobile_nr):
+    mobile_nr = "".join(mobile_nr.split())
+    if mobile_nr[0] == "+":
+        mobile_nr = mobile_nr[1:]
+    if len(mobile_nr) < 5 or len(mobile_nr) > 12:
+        return False
+    if not mobile_nr.isdigit():
         return False
     return True
