@@ -137,5 +137,6 @@ def get_logged_in_user_id():
 def username_used(username):
     sql = text("SELECT username FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username":username}).fetchone()
-    return result[0]
-
+    if result:
+        return result[0]
+    return None
